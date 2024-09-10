@@ -1,0 +1,29 @@
+{
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.6.0",
+    "@types/node": "20.1.7",
+    "@types/react": "18.2.6",
+    "@types/react-dom": "18.2.4",
+    "autoprefixer": "^10.4.20",
+    "axios": "^1.7.7",
+    "bootstrap": "^5.3.0",
+    "eslint": "8.40.0",
+    "eslint-config-next": "13.4.2",
+    "mdb-react-ui-kit": "^8.0.0",
+    "next": "^14.2.8",
+    "postcss": "^8.4.45",
+    "react": "^18.3.1",
+    "react-bootstrap": "^2.8.0",
+    "react-dom": "^18.3.1",
+    "typescript": "5.0.4"
+  }
+}
