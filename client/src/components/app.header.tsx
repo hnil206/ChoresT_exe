@@ -14,16 +14,16 @@ export default function Header(){
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Link href="/" passHref>
-                <Nav.Link>Home</Nav.Link>
+                <Button>Home</Button>
               </Link>
               <Link href="/services" passHref>
-                <Nav.Link>Services</Nav.Link>
+                <Button>Services</Button>
               </Link>
               <Link href="/pricing" passHref>
-                <Nav.Link>Pricing</Nav.Link>
+                <Button>Pricing</Button>
               </Link>
               <Link href="/about" passHref>
-                <Nav.Link>About</Nav.Link>
+                  <Button>About</Button>
               </Link>
             </Nav>
             <Button variant="outline-light">Book a Maid</Button>

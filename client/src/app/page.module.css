@@ -227,3 +227,25 @@
     transform: rotate(0deg);
   }
 }
+
+.carousel-item img {
+  width: 100%;
+  height: auto;
+}
+
+.container {
+  padding: 20px;
+}
+
+.card {
+  margin-bottom: 20px;
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+}
+
+.card-body {
+  text-align: center;
+}
