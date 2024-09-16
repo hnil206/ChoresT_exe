@@ -1,6 +1,6 @@
-'use client'
-import Link from 'next/link';
-import Image from 'next/image';
+"use client";
+import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 
-import React from 'react';
+import React from "react";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -31,7 +31,12 @@ export default function Header() {
         <NavigationMenu>
           <NavigationMenuList className="flex items-center justify-between py-4">
             <div className="flex items-center space-x-4">
-              <Image src="/image/download.jpg" alt="Logo" width={40} height={40} />
+              <Image
+                src="/image/download.jpg"
+                alt="Logo"
+                width={40}
+                height={40}
+              />
               <NavigationMenuItem>
                 <Link href="/" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
@@ -71,7 +76,9 @@ export default function Header() {
               </NavigationMenuItem>
             </div>
             <NavigationMenuItem>
-              <Button variant="outline">Book a Maid</Button>
+              <Link href="/book">
+                <Button variant="outline">Book a Maid</Button>
+              </Link>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>

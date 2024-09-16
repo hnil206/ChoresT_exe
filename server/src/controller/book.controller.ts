@@ -5,7 +5,7 @@ import { Book } from '../model/book.model';
 // Create a new book entry
 export const createBook = async (req: Request, res: Response) => {
     try {
-      const { name, phone, address, service, squareMeters } = req.body;
+      const { name, phone, address, service, squareMeters, price } = req.body;
   
       // Check if all fields are provided
       if (!name || !phone) {
@@ -21,6 +21,7 @@ export const createBook = async (req: Request, res: Response) => {
         address,
         service,
         squareMeters,
+        price,
       });
   
       // Save the entry to the database
