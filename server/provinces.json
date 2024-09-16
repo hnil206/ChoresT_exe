@@ -1,0 +1,21 @@
+[
+    {
+      "name": "Hà Nội",
+      "districts": [
+        {
+          "name": "Quận Hoàn Kiếm",
+          "wards": ["Phường Hàng Bạc", "Phường Hàng Đào", "Phường Cửa Đông"]
+        }
+      ]
+    },
+    {
+      "name": "Hồ Chí Minh",
+      "districts": [
+        {
+          "name": "Quận 1",
+          "wards": ["Phường Bến Nghé", "Phường Bến Thành", "Phường Cô Giang"]
+        }
+      ]
+    }
+  ]
+  

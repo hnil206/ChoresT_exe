@@ -1,32 +1,39 @@
 'use client';
 
 import { useState } from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import logo from '../../../public/image/anh_login.jpeg'
+import Image from 'next/image';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+const formSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+});
+
 const Login = () => {
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post('http://localhost:8080/auth/login', formData);
-      localStorage.setItem('accessToken', response.data.accessToken); // Save JWT token
+      // Replace with your actual API call
+      // const response = await axios.post('http://localhost:8080/auth/login', values);
+      // localStorage.setItem('accessToken', response.data.accessToken);
       alert('Login successful');
-      router.push('/dashboard'); // Redirect to dashboard
+      router.push('/dashboard');
     } catch (error) {
       console.error('Login error:', error);
       alert('Invalid credentials');
@@ -34,90 +41,55 @@ const Login = () => {
   };
 
   return (
-    <section className="vh-100" style={{ backgroundColor: '#9A616D' }}>
-      <div className="container py-5 h-100">
-        <div className="row d-flex justify-content-center align-items-center h-100">
-          <div className="col col-xl-10">
-            <div className="card" style={{ borderRadius: '1rem' }}>
-              <div className="row g-0">
-                <div className="col-md-6 col-lg-5 d-none d-md-block">
-                  <img
-                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
-                    alt="login form"
-                    className="img-fluid"
-                    style={{ borderRadius: '1rem 0 0 1rem' }}
-                  />
-                </div>
-                <div className="col-md-6 col-lg-7 d-flex align-items-center">
-                  <div className="card-body p-4 p-lg-5 text-black">
-                    <form onSubmit={handleSubmit}>
-                      <div className="d-flex align-items-center mb-3 pb-1">
-                       <img src =''/>
-
-                      </div>
-
-                      <h5 className="fw-normal mb-3 pb-3" style={{ letterSpacing: '1px', fontFamily:'Liberation Sans', justifyContent:"center" }}>
-                       Welcome to ChoresT
-                      </h5>
-
-                      <div className="form-outline mb-4">
-                        <input
-                          type="email"
-                          name="email"
-                          id="form2Example17"
-                          className="form-control form-control-lg"
-                          value={formData.email}
-                          onChange={handleChange}
-                          required
-                        />
-                        <label className="form-label" htmlFor="form2Example17">
-                          Email address
-                        </label>
-                      </div>
-
-                      <div className="form-outline mb-4">
-                        <input
-                          type="password"
-                          name="password"
-                          id="form2Example27"
-                          className="form-control form-control-lg"
-                          value={formData.password}
-                          onChange={handleChange}
-                          required
-                        />
-                        <label className="form-label" htmlFor="form2Example27">
-                          Password
-                        </label>
-                      </div>
-
-                      <div className="pt-1 mb-4">
-                        <button
-                          className="btn btn-dark btn-lg btn-block"
-                          type="submit"
-                        >
-                          Login
-                        </button>
-                      </div>
-
-                      <a className="small text-muted" href="#!">
-                        Forgot password?
-                      </a>
-                      <p className="mb-5 pb-lg-2" style={{ color: '#393f81' }}>
-                        Don't have an account?{' '}
-                        <a href="/signup" style={{ color: '#393f81' }}>
-                          Register here
-                        </a>
-                      </p>
-                     
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
+    <div className="container mx-auto flex items-center justify-center min-h-screen bg-gray-100">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold text-center">Welcome to ChoresT</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter your email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" placeholder="Enter your password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className="w-full">Login</Button>
+            </form>
+          </Form>
+          <div className="mt-4 text-center">
+            <a href="#" className="text-sm text-blue-600 hover:underline">Forgot password?</a>
           </div>
-        </div>
-      </div>
-    </section>
+          <div className="mt-4 text-center">
+            <p className="text-sm text-gray-600">
+              Don't have an account?{' '}
+              <a href="/signup" className="text-blue-600 hover:underline">Register here</a>
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

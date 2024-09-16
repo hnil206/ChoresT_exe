@@ -1,35 +1,81 @@
 'use client'
-import { Container, Nav, Navbar, Button, Card, Row, Col } from 'react-bootstrap';
-import Image from 'next/image';
 import Link from 'next/link';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import Image from 'next/image';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Menu } from "lucide-react";
 
-export default function Header(){
-    return (
-        <div>
-            <Navbar bg="dark" variant="dark" expand="lg" sticky="top">
-        <Container>
-          <Navbar.Brand href="/">Maid Rental</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              <Link href="/" passHref>
-                <Button>Home</Button>
-              </Link>
-              <Link href="/services" passHref>
-                <Button>Services</Button>
-              </Link>
-              <Link href="/pricing" passHref>
-                <Button>Pricing</Button>
-              </Link>
-              <Link href="/about" passHref>
-                  <Button>About</Button>
-              </Link>
-            </Nav>
-            <Button variant="outline-light">Book a Maid</Button>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-        </div>
-    )
+import React from 'react';
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+
+export default function Header() {
+  return (
+    <header className="bg-blue-500">
+      <div className="container mx-auto px-4">
+        <NavigationMenu>
+          <NavigationMenuList className="flex items-center justify-between py-4">
+            <div className="flex items-center space-x-4">
+              <Image src="/image/download.jpg" alt="Logo" width={40} height={40} />
+              <NavigationMenuItem>
+                <Link href="/" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Maid Rental
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            </div>
+            <div className="flex space-x-2">
+              <NavigationMenuItem>
+                <Link href="/" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Home
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="/services" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Services
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="/pricing" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Pricing
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="/about" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    About
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            </div>
+            <NavigationMenuItem>
+              <Button variant="outline">Book a Maid</Button>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+      </div>
+    </header>
+  );
 }

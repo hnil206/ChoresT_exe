@@ -5,13 +5,16 @@ const cookieSession = require("cookie-session");
 import mongoose from 'mongoose';
 import routes from './routes/routes';
 import auth from './routes/user.routes';
+import book from './routes/book.routes';
+import fs from 'fs';
+import path from 'path';
 import dotenv from 'dotenv';
 // Initialize express app
 const app: Application = express();
 
 // Middleware
 var corsOptions = {
-  origin: "http://localhost:3000",
+  origin: "http://localhost:1234",
   credentials: true
 };
 app.use(cors(corsOptions));
@@ -22,6 +25,20 @@ app.use(express.urlencoded({ extended: true }));
 
 // parse requests of content-type - application/json
 app.use(express.json());
+
+
+// Function to read JSON data
+const readJsonFile = (fileName: string) => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(path.join(__dirname, 'data', fileName), 'utf8', (err, data) => {
+      if (err) reject(err);
+      resolve(JSON.parse(data));
+    });
+  });
+};
+
+
+// API to get provinces
 
 app.use(
   cookieSession({
@@ -36,6 +53,9 @@ mongoose.set('strictQuery', true);
 
 // MongoDB connection
 const mongoURI = 'mongodb+srv://Luund:Uc8Qzwd2j8AMtJxW@cluster0.ioech.mongodb.net/ChoresT';
+
+
+
 
 mongoose.connect(mongoURI, {})
   .then(() => {
@@ -57,6 +77,9 @@ app.get('/', (req, res) => {
 app.use('/api', routes);
 app.use('/auth', auth);
 app.use('/auth', auth);
+app.use('/auth', auth);
+app.use('/books', book);
+
 
 // Export the app
 export default app;

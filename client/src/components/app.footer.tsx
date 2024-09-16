@@ -1,196 +1,75 @@
 'use client';
 
 import React from 'react';
-import {
-  MDBFooter,
-  MDBContainer,
-  MDBIcon,
-  MDBInput,
-  MDBCol,
-  MDBRow,
-  MDBBtn
-} from 'mdb-react-ui-kit';
 import Link from 'next/link';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { Facebook, Twitter, Mail, Instagram, Linkedin, Github } from 'lucide-react';
 
 export default function App() {
   return (
-    <MDBFooter className='text-center' color='white' bgColor='dark'>
-      <MDBContainer className='p-4'>
-        <section className='mb-4'>
-          <MDBBtn outline color="light" floating className='m-1' href='#!' role='button'>
-            <MDBIcon fab icon='facebook-f' />
-          </MDBBtn>
-
-          <MDBBtn outline color="light" floating className='m-1' href='#!' role='button'>
-            <MDBIcon fab icon='twitter' />
-          </MDBBtn>
-
-          <MDBBtn outline color="light" floating className='m-1' href='#!' role='button'>
-            <MDBIcon fab icon='google' />
-          </MDBBtn>
-
-          <MDBBtn outline color="light" floating className='m-1' href='#!' role='button'>
-            <MDBIcon fab icon='instagram' />
-          </MDBBtn>
-
-          <MDBBtn outline color="light" floating className='m-1' href='#!' role='button'>
-            <MDBIcon fab icon='linkedin-in' />
-          </MDBBtn>
-
-          <MDBBtn outline color="light" floating className='m-1' href='#!' role='button'>
-            <MDBIcon fab icon='github' />
-          </MDBBtn>
+    <footer className="bg-gray-900 text-white">
+      <div className="container mx-auto p-4">
+        <section className="mb-4 flex justify-center space-x-2">
+          
+        <Button variant="default" size="icon">
+            <Facebook className="h-4 w-4" />
+          </Button>
+          
+          <Button variant="default" size="icon">
+            <Twitter className="h-4 w-4" />
+          </Button>
+          <Button variant="default" size="icon">
+            <Mail className="h-4 w-4" />
+          </Button>
+          <Button variant="default" size="icon">
+            <Instagram className="h-4 w-4" />
+          </Button>
+          <Button variant="default" size="icon">
+            <Linkedin className="h-4 w-4" />
+          </Button>
+          <Button variant="default" size="icon">
+            <Github className="h-4 w-4" />
+          </Button>
         </section>
 
-        <section>
-          <form action=''>
-            <MDBRow className='d-flex justify-content-center'>
-              <MDBCol size="auto">
-                <p className='pt-2'>
-                  <strong>Sign up for our newsletter</strong>
-                </p>
-              </MDBCol>
-
-              <MDBCol md='5' start>
-                <MDBInput contrast type='email' label='Email address' className='mb-4' />
-              </MDBCol>
-
-              <MDBCol size="auto">
-                <MDBBtn outline color='light' type='submit' className='mb-4'>
-                  Subscribe
-                </MDBBtn>
-              </MDBCol>
-            </MDBRow>
+        <section className="mb-4">
+          <form className="flex flex-col md:flex-row justify-center items-center space-y-2 md:space-y-0 md:space-x-2">
+            
+            <Input type="email" placeholder="Email address" className="w-full md:w-auto" />
+            <Button variant="default">Subscribe</Button>
           </form>
         </section>
 
-        <section className='mb-4'>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt distinctio earum repellat quaerat
-            voluptatibus placeat nam, commodi optio pariatur est quia magnam eum harum corrupti dicta, aliquam
-            sequi voluptate quas.
-          </p>
-        </section>
+        
 
         <section>
-          <MDBRow>
-            <MDBCol lg='3' md='6' className='mb-4 mb-md-0'>
-              <h5 className='text-uppercase'>Links</h5>
-
-              <ul className='list-unstyled mb-0'>
-                <li>
-                  <Link href='#!' className='text-white'>
-                    Link 1
-                  </Link>
-                </li>
-                <li>
-                  <Link href='#!' className='text-white'>
-                    Link 2
-                  </Link>
-                </li>
-                <li>
-                  <Link href='#!' className='text-white'>
-                    Link 3
-                  </Link>
-                </li>
-                <li>
-                  <Link href='#!' className='text-white'>
-                    Link 4
-                  </Link>
-                </li>
-              </ul>
-            </MDBCol>
-
-            <MDBCol lg='3' md='6' className='mb-4 mb-md-0'>
-              <h5 className='text-uppercase'>Links</h5>
-
-              <ul className='list-unstyled mb-0'>
-                <li>
-                  <Link href='#!' className='text-white'>
-                    Link 1
-                  </Link>
-                </li>
-                <li>
-                  <Link href='#!' className='text-white'>
-                    Link 2
-                  </Link>
-                </li>
-                <li>
-                  <Link href='#!' className='text-white'>
-                    Link 3
-                  </Link>
-                </li>
-                <li>
-                  <Link href='#!' className='text-white'>
-                    Link 4
-                  </Link>
-                </li>
-              </ul>
-            </MDBCol>
-
-            <MDBCol lg='3' md='6' className='mb-4 mb-md-0'>
-              <h5 className='text-uppercase'>Links</h5>
-
-              <ul className='list-unstyled mb-0'>
-                <li>
-                  <Link href='#!' className='text-white'>
-                    Link 1
-                  </Link>
-                </li>
-                <li>
-                  <Link href='#!' className='text-white'>
-                    Link 2
-                  </Link>
-                </li>
-                <li>
-                  <Link href='#!' className='text-white'>
-                    Link 3
-                  </Link>
-                </li>
-                <li>
-                  <Link href='#!' className='text-white'>
-                    Link 4
-                  </Link>
-                </li>
-              </ul>
-            </MDBCol>
-
-            <MDBCol lg='3' md='6' className='mb-4 mb-md-0'>
-              <h5 className='text-uppercase'>Links</h5>
-
-              <ul className='list-unstyled mb-0'>
-                <li>
-                  <Link href='#!' className='text-white'>
-                    Link 1
-                  </Link>
-                </li>
-                <li>
-                  <Link href='#!' className='text-white'>
-                    Link 2
-                  </Link>
-                </li>
-                <li>
-                  <Link href='#!' className='text-white'>
-                    Link 3
-                  </Link>
-                </li>
-                <li>
-                  <Link href='#!' className='text-white'>
-                    Link 4
-                  </Link>
-                </li>
-              </ul>
-            </MDBCol>
-          </MDBRow>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map((column) => (
+              <Card key={column} className="bg-gray-800">
+                <CardContent>
+                  <h5 className="text-lg font-bold mb-2">Links</h5>
+                  <ul className="space-y-1">
+                    {[1, 2, 3, 4].map((link) => (
+                      <li key={link}>
+                        <Link href="#!" className="hover:underline">
+                          Link {link}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </section>
-      </MDBContainer>
-
-      <div className='text-center p-3' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
-        © 2020 Copyright:
-        <a className='text-white' href='https://mdbootstrap.com/'>
-          MDBootstrap.com
-        </a>
       </div>
-    </MDBFooter>
+
+      <div className="text-center p-3 bg-gray-800">
+        © 2024 Copyright:
+        
+      </div>
+    </footer>
   );
 }
