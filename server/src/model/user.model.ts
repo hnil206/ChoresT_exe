@@ -21,6 +21,10 @@ const userSchema = new Schema(
       required: true,
       minlength: 6,
     },
+    avatar:{
+      type: String,
+      default: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    },
     roles: {
       type: [String],  // Array of roles
       enum: ["admin", "user", "housemaid"],  // Only allow these specific roles

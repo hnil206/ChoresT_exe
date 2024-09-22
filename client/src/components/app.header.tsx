@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -12,29 +11,24 @@ import {
 } from "@/components/ui/navigation-menu";
 import useAuth from "../app/hook/useAuth";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { logout } from "@/app/utils/logout";
 
-export default function Header() {
-  const { isAuthenticated, logout } = useAuth();
+export default function Header({ isAuthenticated }: { isAuthenticated: boolean }) {
   const router = useRouter();
-  const [isUserAuthenticated, setIsUserAuthenticated] = useState<boolean>(false);
 
-  useEffect(() => {
-    setIsUserAuthenticated(isAuthenticated);
-  }, [isAuthenticated]);
+  const handleLogout = async () => {
+    await logout();
+    router.push('/login');
+  };
 
   const handleBookClick = () => {
-    if (isUserAuthenticated) {
+    if (isAuthenticated) {
       router.push('/book');
     } else {
       router.push('/login');
     }
   };
 
-  const handleLogout = async () => {
-    await logout();
-    router.push('/login');
-  };
 
   return (
     <header className="bg-blue-500">
@@ -93,11 +87,20 @@ export default function Header() {
                 </Button>
               </NavigationMenuItem>
               {isAuthenticated ? (
+                <>
+                <NavigationMenuItem>
+                  <Link href="/profile" legacyBehavior passHref>
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                      Profile
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
                 <NavigationMenuItem>
                   <Button variant="outline" onClick={handleLogout}>
                     Logout
                   </Button>
                 </NavigationMenuItem>
+                </>
               ) : (
                 <NavigationMenuItem>
                   <Link href="/login" legacyBehavior passHref>

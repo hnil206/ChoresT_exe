@@ -69,3 +69,40 @@ export const logout = (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error during logout' });
   }
 };
+
+
+export const getProfile = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findById(req.user!.id).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+
+export const updateProfile = async (req: Request, res: Response) => {
+  try {
+    const { username, email, avatar } = req.body;
+
+    const updateData: {[key: string]: any} = {};
+
+    if(username) updateData.username = username;
+    if(email) updateData.email = email;
+    if(avatar) updateData.avatar = avatar;
+
+    const user = await User.findByIdAndUpdate(
+      req.user!.id,
+      updateData,
+      { new: true }
+    ).select('-password');
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};

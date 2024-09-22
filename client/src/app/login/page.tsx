@@ -32,7 +32,7 @@ const Login = () => {
       if (response.data && response.data.accessToken) {
         localStorage.setItem('token', response.data.accessToken); // Ensure correct key and value
         alert('Login successful');
-        router.push('/'); // Redirect to home page
+        window.location.href = '/';
       } else {
         console.error('No token received:', response.data);
         throw new Error('No token received from server');
