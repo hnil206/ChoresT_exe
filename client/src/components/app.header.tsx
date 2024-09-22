@@ -1,30 +1,41 @@
 "use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
-
-import React from "react";
 import {
   NavigationMenu,
-  NavigationMenuContent,
+  NavigationMenuList,
   NavigationMenuItem,
   NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import useAuth from "../app/hook/useAuth";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Header() {
+  const { isAuthenticated, logout } = useAuth();
+  const router = useRouter();
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsUserAuthenticated(isAuthenticated);
+  }, [isAuthenticated]);
+
+  const handleBookClick = () => {
+    if (isUserAuthenticated) {
+      router.push('/book');
+    } else {
+      router.push('/login');
+    }
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/login');
+  };
+
   return (
     <header className="bg-blue-500">
       <div className="container mx-auto px-4">
@@ -75,11 +86,28 @@ export default function Header() {
                 </Link>
               </NavigationMenuItem>
             </div>
-            <NavigationMenuItem>
-              <Link href="/book">
-                <Button variant="outline">Book a Maid</Button>
-              </Link>
-            </NavigationMenuItem>
+            <div className="flex space-x-2">
+              <NavigationMenuItem>
+                <Button variant="outline" onClick={handleBookClick}>
+                  Book a Maid
+                </Button>
+              </NavigationMenuItem>
+              {isAuthenticated ? (
+                <NavigationMenuItem>
+                  <Button variant="outline" onClick={handleLogout}>
+                    Logout
+                  </Button>
+                </NavigationMenuItem>
+              ) : (
+                <NavigationMenuItem>
+                  <Link href="/login" legacyBehavior passHref>
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                      Login
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+              )}
+            </div>
           </NavigationMenuList>
         </NavigationMenu>
       </div>

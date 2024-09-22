@@ -1,6 +1,7 @@
 import express from 'express';
-import {createBook, getBooks} from '../controller/book.controller';
-
+import {getBooks, createBook} from '../controller/book.controller';
+import {verifyHousemaid} from '../middlewares/verifyHousemaid';
+import {verifyUser} from '../middlewares/verifyUser';
 const router = express.Router();
 
 

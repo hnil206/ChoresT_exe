@@ -46,6 +46,9 @@ const formSchema = z.object({
   squareMeters: z.string().min(1, {
     message: "Please select square meters.",
   }),
+  price: z.number().min(1, {
+    message: "Please select price.",
+  }),
   phone: z.string().min(10, {
     message: "Phone number must be at least 10 digits.",
   }),
@@ -69,6 +72,7 @@ const Booking = () => {
       service: "",
       squareMeters: "",
       phone: "",
+      price: 0,
     },
   });
 
@@ -123,10 +127,18 @@ const Booking = () => {
       price: total.toString(), // Add total as the price
     };
 
+    // Get token from localStorage (or cookies)
+    const token = localStorage.getItem("jwtToken"); // Change this if you store token elsewhere
+
     try {
       const response = await axios.post(
-        "http://localhost:8080/books/create",
-        updatedValues
+        "http://localhost:8080/api/create",
+        updatedValues,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Attach token in the request header
+          },
+        }
       );
       setSuccess("Booking created successfully!");
     } catch (error) {
@@ -134,6 +146,7 @@ const Booking = () => {
       console.error("Error:", error);
     }
   };
+
 
   return (
     <div className="container mx-auto p-4">

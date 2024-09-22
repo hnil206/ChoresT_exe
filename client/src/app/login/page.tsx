@@ -1,24 +1,22 @@
-'use client';
-
-import { useState } from 'react';
+'use client'
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
+import axios from 'axios';
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
 const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
+  email: z.string().email({ message: "Invalid email address" }),
+  password: z.string().min(6, { message: "Password must be at least 6 characters long" }),
 });
 
 const Login = () => {
   const router = useRouter();
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -29,14 +27,20 @@ const Login = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      // Replace with your actual API call
-      // const response = await axios.post('http://localhost:8080/auth/login', values);
-      // localStorage.setItem('accessToken', response.data.accessToken);
-      alert('Login successful');
-      router.push('/dashboard');
-    } catch (error) {
+      const response = await axios.post('http://localhost:8080/auth/login', values);
+
+      if (response.data && response.data.accessToken) {
+        localStorage.setItem('token', response.data.accessToken); // Ensure correct key and value
+        alert('Login successful');
+        router.push('/'); // Redirect to home page
+      } else {
+        console.error('No token received:', response.data);
+        throw new Error('No token received from server');
+      }
+    } catch (error: any) {
       console.error('Login error:', error);
-      alert('Invalid credentials');
+      const errorMessage = error.response?.data?.message || 'Invalid credentials';
+      alert(errorMessage);
     }
   };
 

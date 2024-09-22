@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/carousel"
  
 export default function HomePage() {
+  
   return (
     <>
     <div className='container '>

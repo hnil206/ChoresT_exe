@@ -4,7 +4,7 @@ import express, { Application } from 'express';
 const cookieSession = require("cookie-session");
 import mongoose from 'mongoose';
 import routes from './routes/routes';
-import auth from './routes/user.routes';
+import userRoutes from './routes/user.routes';
 import book from './routes/book.routes';
 import fs from 'fs';
 import path from 'path';
@@ -74,11 +74,9 @@ app.get('/', (req, res) => {
   res.send('Server is up and running!');
 });
 
-app.use('/api', routes);
-app.use('/auth', auth);
-app.use('/auth', auth);
-app.use('/auth', auth);
-app.use('/books', book);
+app.use('/', routes);
+app.use('/auth', userRoutes);
+app.use('/api', book);
 
 
 // Export the app

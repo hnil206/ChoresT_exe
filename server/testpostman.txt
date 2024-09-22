@@ -1,0 +1,13 @@
+{
+  "name": "Luu",
+  "phone": "0386393698",
+  "address": "Da Nang",
+  "service": "Don nha",
+  "squareMeters": "100",
+  "price":"100"
+}
+{
+  "username": "User1",
+  "email": "User1@gmail.com",
+  "password": "123456"
+}
