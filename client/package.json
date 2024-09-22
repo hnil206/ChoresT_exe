@@ -24,6 +24,7 @@
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
+    "@react-oauth/google": "^0.12.1",
     "@tailwindcss/forms": "^0.5.7",
     "@vercel/postgres": "^0.5.1",
     "autoprefixer": "10.4.15",

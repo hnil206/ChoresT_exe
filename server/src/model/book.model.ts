@@ -24,10 +24,10 @@ const bookSchema = new Schema({
     required: true,
   },
   price: {
-    type: Number,
+    type: String,
     required: true,
   },
-});
+}, { timestamps: true });
 
 // Create the Book model from the schema
 export const Book = mongoose.model("Book", bookSchema);

@@ -17,10 +17,7 @@ const formSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z.string(),
-  phone: z.string().optional(),
-  dateOfBirth: z.string().optional(),
-  admin: z.boolean().optional(),
-  housemaid: z.boolean().optional(),
+  phone: z.string().optional()
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match",
   path: ["confirmPassword"],
@@ -35,22 +32,24 @@ const Signup = () => {
       email: "",
       password: "",
       confirmPassword: "",
-      phone: "",
-      dateOfBirth: "",
-      admin: false,
-      housemaid: false,
+      phone: ""
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      // Replace with your actual API call
-      await axios.post('http://localhost:8080/auth/signup', values);
+      const response = await axios.post('http://localhost:8080/auth/signup', values);
+      console.log('Signup response:', response.data);
       alert('User registered successfully!');
       router.push('/login');
     } catch (error) {
-      console.error('Error during signup:', error);
-      alert('Signup failed!');
+      if (axios.isAxiosError(error)) {
+        console.error('Signup error:', error.response?.data || error.message);
+        alert(`Signup failed: ${error.response?.data?.message || error.message}`);
+      } else {
+        console.error('Unexpected error:', error);
+        alert('An unexpected error occurred during signup');
+      }
     }
   };
 
@@ -137,53 +136,7 @@ const Signup = () => {
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={form.control}
-                    name="dateOfBirth"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Date of Birth</FormLabel>
-                        <FormControl>
-                          <Input type="date" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="admin"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <div className="space-y-1 leading-none">
-                          <FormLabel>Admin</FormLabel>
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="housemaid"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <div className="space-y-1 leading-none">
-                          <FormLabel>Housemaid</FormLabel>
-                        </div>
-                      </FormItem>
-                    )}
-                  />
+                  
                   <Button type="submit" className="w-full">Sign Up</Button>
                 </form>
               </Form>

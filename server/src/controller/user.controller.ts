@@ -10,20 +10,37 @@ const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
 
 export const signup = async (req: Request, res: Response) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, phone, dateOfBirth, admin, housemaid } = req.body;
+    
     // Check if the user already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ message: 'User with this email or username already exists' });
     }
+    
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
+    
+    // Create roles array
+    const roles = ['user'];
+    if (admin) roles.push('admin');
+    if (housemaid) roles.push('housemaid');
+
     // Create and save the new user
-    const newUser = new User({ username, email, password: hashedPassword });
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+      phone,
+      dateOfBirth,
+      roles
+    });
+    
     await newUser.save();
     res.status(201).json({ message: 'User registered successfully!' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error during signup' });
+  } catch (error: any) { 
+    console.error('Signup error:', error);
+    res.status(500).json({ message: 'Error during signup', error: error.message });
   }
 };
 

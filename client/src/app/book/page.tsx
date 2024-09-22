@@ -46,11 +46,11 @@ const formSchema = z.object({
   squareMeters: z.string().min(1, {
     message: "Please select square meters.",
   }),
-  price: z.number().min(1, {
-    message: "Please select price.",
-  }),
   phone: z.string().min(10, {
     message: "Phone number must be at least 10 digits.",
+  }),
+  price: z.string().min(1, {
+    message: "Please select price.",
   }),
   // Remove validation for price field since it's calculated automatically
 });
@@ -72,7 +72,7 @@ const Booking = () => {
       service: "",
       squareMeters: "",
       phone: "",
-      price: 0,
+      price: "",
     },
   });
 
@@ -114,39 +114,40 @@ const Booking = () => {
       default:
         price = 0;
     }
-    setTotal(price); // Set the calculated price to total state
+    setTotal(price);
+    form.setValue("price", price.toString()); // Set the calculated price to total state
   };
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setError("");
     setSuccess("");
-
-    // Set the price value from total before submitting the form
-    const updatedValues = {
-      ...values,
-      price: total.toString(), // Add total as the price
-    };
-
-    // Get token from localStorage (or cookies)
-    const token = localStorage.getItem("jwtToken"); // Change this if you store token elsewhere
-
+  
+    const token = localStorage.getItem("token");
+  
+    if (!token) {
+      setError("You must be logged in to create a booking.");
+      return;
+    }
+  
     try {
       const response = await axios.post(
         "http://localhost:8080/api/create",
-        updatedValues,
+        values,
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Attach token in the request header
+            Authorization: `Bearer ${token}`,
           },
         }
       );
       setSuccess("Booking created successfully!");
     } catch (error) {
-      setError("Error creating booking. Please try again.");
+      if (axios.isAxiosError(error) && error.response) {
+        setError(`Error creating booking: ${error.response.data.message}`);
+      } else {
+        setError("Error creating booking. Please try again.");
+      }
       console.error("Error:", error);
     }
   };
-
 
   return (
     <div className="container mx-auto p-4">
@@ -274,7 +275,10 @@ const Booking = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Service</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select Service" />
@@ -337,11 +341,11 @@ const Booking = () => {
           <FormField
             control={form.control}
             name="price"
-            render={() => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Total Price</FormLabel>
                 <FormControl>
-                  <Input value={`${total}`} disabled />
+                  <Input {...field} disabled />
                 </FormControl>
               </FormItem>
             )}
