@@ -27,6 +27,12 @@ const bookSchema = new Schema({
     type: String,
     required: true,
   },
+  status: {
+    type: String,
+    enum: ['accept', 'reject', 'processing'],
+    default: 'processing',
+    required: true,
+  },
 }, { timestamps: true });
 
 // Create the Book model from the schema

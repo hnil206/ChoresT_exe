@@ -69,12 +69,16 @@ const ProfilePage = () => {
           </div>
           <div className="space-y-4">
             <div>
-              <h3 className="font-semibold">Username</h3>
+              <h3 className="font-semibold">Full name</h3>
               <p>{user.username}</p>
             </div>
             <div>
               <h3 className="font-semibold">Email</h3>
               <p>{user.email}</p>
+            </div>
+            <div>
+              <h3 className="font-semibold">Role</h3>
+              <p>{user.roles}</p>
             </div>
           </div>
         </CardContent>
