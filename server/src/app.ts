@@ -10,6 +10,7 @@ import blogRoutes from './routes/blogRoutes';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
+import auth from './routes/user.routes'
 // Initialize express app
 const app: Application = express();
 
@@ -81,7 +82,7 @@ app.use('/api', routes);
 app.use('/auth', auth);
 app.use('/auth', auth);
 app.use('/auth', auth);
-app.use('/books', book);
+app.use('/api', book);
 app.use('/uploads',express.static('uploads'));
 app.use('/api/blogs',blogRoutes);
 
