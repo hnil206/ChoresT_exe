@@ -36,6 +36,10 @@ const userSchema = new Schema(
       default: ["user"], // Default role is 'user'
       required: true,
     },
+    comments: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Comment'
+    }]
   },
   {
     timestamps: true,

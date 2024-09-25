@@ -4,6 +4,8 @@ import axios from 'axios';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 interface Housemaid {
   _id: string;
@@ -51,7 +53,10 @@ const HousemaidList: React.FC = () => {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-gray-600 mb-1">Email: {housemaid.email}</p>
-              <p className="text-sm text-gray-600">Phone: {housemaid.phone}</p>
+              <p className="text-sm text-gray-600 mb-4">Phone: {housemaid.phone}</p>
+              <Link href={`/housemaid/${housemaid._id}`}>
+                <Button variant="outline">View Details</Button>
+              </Link>
             </CardContent>
           </Card>
         ))}
