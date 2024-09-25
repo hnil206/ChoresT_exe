@@ -9,66 +9,70 @@ import { Facebook, Twitter, Mail, Instagram, Linkedin, Github } from 'lucide-rea
 
 export default function App() {
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="container mx-auto p-4">
-        <section className="mb-4 flex justify-center space-x-2">
-          
-        <Button variant="default" size="icon">
-            <Facebook className="h-4 w-4" />
+    <footer className="bg-gray-900 text-white py-12">
+      <div className="container mx-auto px-4">
+        {/* Social Media Icons */}
+        <section className="mb-8 flex justify-center space-x-4">
+          <Button variant="default" size="icon" className="hover:bg-blue-600 border-blue-600">
+            <Facebook className="h-6 w-6" />
           </Button>
-          
-          <Button variant="default" size="icon">
-            <Twitter className="h-4 w-4" />
+          <Button variant="default" size="icon" className="hover:bg-blue-400 border-blue-400">
+            <Twitter className="h-6 w-6" />
           </Button>
-          <Button variant="default" size="icon">
-            <Mail className="h-4 w-4" />
+          <Button variant="default" size="icon" className="hover:bg-red-600 border-red-600">
+            <Mail className="h-6 w-6" />
           </Button>
-          <Button variant="default" size="icon">
-            <Instagram className="h-4 w-4" />
+          <Button variant="default" size="icon" className="hover:bg-pink-600 border-pink-600">
+            <Instagram className="h-6 w-6" />
           </Button>
-          <Button variant="default" size="icon">
-            <Linkedin className="h-4 w-4" />
+          <Button variant="default" size="icon" className="hover:bg-blue-700 border-blue-700">
+            <Linkedin className="h-6 w-6" />
           </Button>
-          <Button variant="default" size="icon">
-            <Github className="h-4 w-4" />
+          <Button variant="default" size="icon" className="hover:bg-gray-800 border-gray-800">
+            <Github className="h-6 w-6" />
           </Button>
         </section>
 
-        <section className="mb-4">
-          <form className="flex flex-col md:flex-row justify-center items-center space-y-2 md:space-y-0 md:space-x-2">
-            
-            <Input type="email" placeholder="Email address" className="w-full md:w-auto" />
-            <Button variant="default">Subscribe</Button>
+        {/* Subscribe Form */}
+        <section className="mb-8">
+          <form className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4">
+            <Input
+              type="email"
+              placeholder="Email address"
+              className="w-full md:w-1/2 px-4 py-2 text-black border rounded-md"
+            />
+            <Button variant="default" className="bg-blue-600 text-white hover:bg-blue-700 px-6 py-2 rounded-md">
+              Subscribe
+            </Button>
           </form>
         </section>
 
-        
+        {/* Single Link & Images */}
+        <section className="flex justify-center items-center flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
+          <Card className="bg-gray-800">
+            <CardContent className="text-center">
+              <h5 className="text-lg font-bold mb-4 text-white">Our Products</h5>
+              <Link href="#!" className="hover:underline text-gray-400">
+                Visit our store
+              </Link>
+            </CardContent>
+          </Card>
 
-        <section>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[1, 2, 3, 4].map((column) => (
-              <Card key={column} className="bg-gray-800">
-                <CardContent>
-                  <h5 className="text-lg font-bold mb-2">Links</h5>
-                  <ul className="space-y-1">
-                    {[1, 2, 3, 4].map((link) => (
-                      <li key={link}>
-                        <Link href="#!" className="hover:underline">
-                          Link {link}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            ))}
+          {/* Image Section */}
+          <div className="flex justify-center items-center space-x-4">
+            <img src="/image/logo.jpg" alt="Product 1" className="w-24 h-24 rounded-md object-cover" />
+            <img src="/image/download.jpg" alt="Product 2" className="w-24 h-24 rounded-md object-cover" />
+            <img src="/image/giupviec.jpg" alt="Product 3" className="w-24 h-24 rounded-md object-cover" />
           </div>
         </section>
       </div>
 
-      <div className="text-center p-3 bg-gray-800">
-        © 2024 Copyright:
-        
+      {/* Copyright Section */}
+      <div className="text-center p-6 bg-gray-800 mt-8">
+        <p className="text-gray-500">
+          © 2024 Copyright:
+          <Link href="#" className="text-blue-400 hover:underline"> Your Company Name</Link>
+        </p>
       </div>
     </footer>
   );

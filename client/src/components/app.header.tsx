@@ -57,7 +57,7 @@ export default function Header({ isAuthenticated }: { isAuthenticated: boolean }
           <Link href="/service" className="text-white hover:text-gray-200">
             Service
           </Link>
-          <Link href="/blog" className="text-white hover:text-gray-200">
+          <Link href="/blogs" className="text-white hover:text-gray-200">
             Blog
           </Link>
           <Link href="/contact" className="text-white hover:text-gray-200">
