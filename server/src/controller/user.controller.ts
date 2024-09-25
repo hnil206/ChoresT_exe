@@ -123,3 +123,13 @@ export const updateProfile = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+export const getAllHousemaids = async (req: Request, res: Response) => {
+  try {
+    const housemaids = await User.find({ roles: 'housemaid' }).select('-password');
+    res.status(200).json(housemaids);
+  } catch (error) {
+    console.error('Error fetching housemaids:', error);
+    res.status(500).json({ message: 'Error fetching housemaids' });
+  }
+};

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Book } from '../model/book.model';
+import mongoose from 'mongoose';
 
 // Create a new book entry, only accessible by authorized housemaid users
 export const createBook = async (req: Request, res: Response) => {
@@ -33,19 +34,19 @@ export const createBook = async (req: Request, res: Response) => {
     });
   }
 };
-
+// house maid: get all bookings
 export const getBooks = async (req: Request, res: Response) => {
   try {
-    if (!req.user) {
-      return res.status(401).json({ message: 'Unauthorized' });
+    if (!req.user || !req.user.roles.includes('housemaid')) {
+      return res.status(403).json({ message: 'Unauthorized: Housemaid access required' });
     }
 
-    // Find all bookings created by the logged-in user
-    const books = await Book.find({ userId: req.user.id });
+    // Find all bookings (not filtered by userId anymore)
+    const books = await Book.find();
 
     if (books.length === 0) {
       return res.status(200).json({
-        message: 'No bookings found for this user',
+        message: 'No bookings found',
         data: [],
       });
     }
@@ -61,6 +62,7 @@ export const getBooks = async (req: Request, res: Response) => {
         squareMeters: book.squareMeters,
         price: book.price,  
         createdAt: book.createdAt,
+        status: book.status,
       })),
     });
   } catch (error) {
@@ -72,32 +74,10 @@ export const getBooks = async (req: Request, res: Response) => {
   }
 };
 
-export const getAllBooks = async (req: Request, res: Response) => {
-  try {
-    if (!req.user || !req.user.roles.includes('admin')) {
-      return res.status(403).json({ message: 'Unauthorized: Admin access required' });
-    }
-
-    const books = await Book.find().populate('userId', 'username email');
-
-    return res.status(200).json({
-      message: 'All bookings fetched successfully',
-      data: books,
-    });
-  } catch (error) {
-    console.error('Error fetching all bookings:', error);
-    return res.status(500).json({
-      message: 'Error fetching all bookings',
-      error: error instanceof Error ? error.message : 'Unknown error',
-    });
-  }
-};
-import mongoose from 'mongoose';
-
 export const updateBookStatus = async (req: Request, res: Response) => {
   try {
-    if (!req.user || !req.user.roles.includes('admin')) {
-      return res.status(403).json({ message: 'Unauthorized: Admin access required' });
+    if (!req.user || !req.user.roles.includes('housemaid')) {
+      return res.status(403).json({ message: 'Unauthorized: Housemaid access required' });
     }
 
     const { _id, status } = req.body;
@@ -133,6 +113,31 @@ export const updateBookStatus = async (req: Request, res: Response) => {
     return res.status(500).json({
       message: 'Error updating booking status',
       error: error instanceof Error ? error.message : 'Unknown error',
+    });
+  }
+};
+
+export const getMyBookings = async (req: Request, res: Response) => {
+  try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: 'Unauthorized: User not authenticated' });
+    }
+
+    const userId = req.user.id;
+    console.log('Fetching bookings for user ID:', userId);
+
+    const bookings = await Book.find({ userId });
+    console.log(`Found ${bookings.length} bookings for user ${userId}`);
+
+    return res.status(200).json({
+      message: 'User bookings fetched successfully',
+      data: bookings
+    });
+  } catch (error) {
+    console.error('Error fetching user bookings:', error);
+    return res.status(500).json({
+      message: 'Error fetching user bookings',
+      error: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 };
