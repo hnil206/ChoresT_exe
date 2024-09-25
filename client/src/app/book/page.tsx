@@ -44,17 +44,22 @@ const formSchema = z.object({
     message: "Please select a service.",
   }),
   squareMeters: z.string().min(1, {
-    message: "Please enter square meters.",
+    message: "Please select square meters.",
   }),
   phone: z.string().min(10, {
     message: "Phone number must be at least 10 digits.",
   }),
+  price: z.string().min(1, {
+    message: "Please select price.",
+  }),
+  // Remove validation for price field since it's calculated automatically
 });
 
 const Booking = () => {
   const { districts, wards, fetchDistricts, fetchWards } = useAddressData();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [total, setTotal] = useState(0); // State to manage total amount
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -67,6 +72,7 @@ const Booking = () => {
       service: "",
       squareMeters: "",
       phone: "",
+      price: "",
     },
   });
 
@@ -87,18 +93,58 @@ const Booking = () => {
     form.setValue("ward", value);
   };
 
+  const handleSquareMetersChange = (value: string) => {
+    form.setValue("squareMeters", value);
+
+    // Calculate price based on selected square meters
+    let price = 0;
+    switch (value) {
+      case "30":
+        price = 100; // Example price for 0-30m
+        break;
+      case "60":
+        price = 200; // Example price for 30-60m
+        break;
+      case "100":
+        price = 300; // Example price for 60-100m
+        break;
+      case "101": // Example price for more than 100m
+        price = 400;
+        break;
+      default:
+        price = 0;
+    }
+    setTotal(price);
+    form.setValue("price", price.toString()); // Set the calculated price to total state
+  };
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setError("");
     setSuccess("");
-
+  
+    const token = localStorage.getItem("token");
+  
+    if (!token) {
+      setError("You must be logged in to create a booking.");
+      return;
+    }
+  
     try {
       const response = await axios.post(
-        "http://localhost:8080/books/create",
-        values
+        "http://localhost:8080/api/create",
+        values,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setSuccess("Booking created successfully!");
     } catch (error) {
-      setError("Error creating booking. Please try again.");
+      if (axios.isAxiosError(error) && error.response) {
+        setError(`Error creating booking: ${error.response.data.message}`);
+      } else {
+        setError("Error creating booking. Please try again.");
+      }
       console.error("Error:", error);
     }
   };
@@ -129,7 +175,10 @@ const Booking = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Province</FormLabel>
-                  <Select onValueChange={handleProvinceChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={handleProvinceChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select Province" />
@@ -150,7 +199,11 @@ const Booking = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>District</FormLabel>
-                  <Select onValueChange={handleDistrictChange} defaultValue={field.value} disabled={!districts.length}>
+                  <Select
+                    onValueChange={handleDistrictChange}
+                    defaultValue={field.value}
+                    disabled={!districts.length}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select District" />
@@ -158,7 +211,10 @@ const Booking = () => {
                     </FormControl>
                     <SelectContent>
                       {districts.map((district) => (
-                        <SelectItem key={district.district_id} value={district.district_id}>
+                        <SelectItem
+                          key={district.district_id}
+                          value={district.district_id}
+                        >
                           {district.district_name}
                         </SelectItem>
                       ))}
@@ -176,7 +232,11 @@ const Booking = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Ward</FormLabel>
-                <Select onValueChange={handleWardChange} defaultValue={field.value} disabled={!wards.length}>
+                <Select
+                  onValueChange={handleWardChange}
+                  defaultValue={field.value}
+                  disabled={!wards.length}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select Ward" />
@@ -215,7 +275,10 @@ const Booking = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Service</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select Service" />
@@ -239,9 +302,22 @@ const Booking = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Square Meters</FormLabel>
-                <FormControl>
-                  <Input type="number" {...field} />
-                </FormControl>
+                <Select
+                  onValueChange={handleSquareMetersChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Square Meters" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="30">0-30m</SelectItem>
+                    <SelectItem value="60">30-60m</SelectItem>
+                    <SelectItem value="100">60-100m</SelectItem>
+                    <SelectItem value="101">100m+</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
@@ -254,29 +330,44 @@ const Booking = () => {
               <FormItem>
                 <FormLabel>Phone</FormLabel>
                 <FormControl>
-                  <Input type="tel" {...field} />
+                  <Input {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
+          {/* Display total price */}
+          <FormField
+            control={form.control}
+            name="price"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Total Price</FormLabel>
+                <FormControl>
+                  <Input {...field} disabled />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          {error && (
+            <Alert variant="destructive">
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+
+          {success && (
+            <Alert variant="default">
+              <AlertTitle>Success</AlertTitle>
+              <AlertDescription>{success}</AlertDescription>
+            </Alert>
+          )}
+
           <Button type="submit">Submit</Button>
         </form>
       </Form>
-
-      {error && (
-        <Alert variant="destructive" className="mt-4">
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
-      {success && (
-        <Alert className="mt-4">
-          <AlertTitle>Success</AlertTitle>
-          <AlertDescription>{success}</AlertDescription>
-        </Alert>
-      )}
     </div>
   );
 };

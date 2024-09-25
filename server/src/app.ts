@@ -4,7 +4,7 @@ import express, { Application } from 'express';
 const cookieSession = require("cookie-session");
 import mongoose from 'mongoose';
 import routes from './routes/routes';
-import auth from './routes/user.routes';
+import userRoutes from './routes/user.routes';
 import book from './routes/book.routes';
 import blogRoutes from './routes/blogRoutes';
 import fs from 'fs';
@@ -75,6 +75,7 @@ app.get('/', (req, res) => {
   res.send('Server is up and running!');
 });
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+
 
 app.use('/api', routes);
 app.use('/auth', auth);

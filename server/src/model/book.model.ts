@@ -1,8 +1,12 @@
 import mongoose from "mongoose";
-
 const Schema = mongoose.Schema;
 
 const bookSchema = new Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
   name: {
     type: String,
     required: true,
@@ -23,7 +27,17 @@ const bookSchema = new Schema({
     type: Number,
     required: true,
   },
-});
+  price: {
+    type: String,
+    required: true,
+  },
+  status: {
+    type: String,
+    enum: ['accept', 'reject', 'processing'],
+    default: 'processing',
+    required: true,
+  },
+}, { timestamps: true });
 
 // Create the Book model from the schema
 export const Book = mongoose.model("Book", bookSchema);

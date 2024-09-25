@@ -1,26 +1,23 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Checkbox } from "@/components/ui/checkbox";
+import axios from 'axios';
 
+// Define the schema for form validation
 const formSchema = z.object({
   username: z.string().min(1, "Username is required"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z.string(),
-  phone: z.string().optional(),
-  dateOfBirth: z.string().optional(),
-  admin: z.boolean(),
-  housemaid: z.boolean(),
+  phone: z.string().optional()
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match",
   path: ["confirmPassword"],
@@ -35,27 +32,29 @@ const Signup = () => {
       email: "",
       password: "",
       confirmPassword: "",
-      phone: "",
-      dateOfBirth: "",
-      admin: false,
-      housemaid: false,
+      phone: ""
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      // Replace with your actual API call
-      // await axios.post('http://localhost:8080/auth/signup', values);
+      const response = await axios.post('http://localhost:8080/auth/signup', values);
+      console.log('Signup response:', response.data);
       alert('User registered successfully!');
       router.push('/login');
     } catch (error) {
-      console.error('Error during signup:', error);
-      alert('Signup failed!');
+      if (axios.isAxiosError(error)) {
+        console.error('Signup error:', error.response?.data || error.message);
+        alert(`Signup failed: ${error.response?.data?.message || error.message}`);
+      } else {
+        console.error('Unexpected error:', error);
+        alert('An unexpected error occurred during signup');
+      }
     }
   };
 
   return (
-    <div className="container mx-auto flex items-center justify-center min-h-screen">
+    <div className="container mx-auto flex items-center justify-center min-h-screen bg-gray-100">
       <Card className="w-full max-w-4xl">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">Sign Up</CardTitle>
@@ -79,7 +78,7 @@ const Signup = () => {
                       <FormItem>
                         <FormLabel>Username</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input placeholder="Enter your username" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -92,7 +91,7 @@ const Signup = () => {
                       <FormItem>
                         <FormLabel>Email</FormLabel>
                         <FormControl>
-                          <Input type="email" {...field} />
+                          <Input type="email" placeholder="Enter your email" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -105,7 +104,7 @@ const Signup = () => {
                       <FormItem>
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input type="password" {...field} />
+                          <Input type="password" placeholder="Enter your password" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -118,7 +117,7 @@ const Signup = () => {
                       <FormItem>
                         <FormLabel>Confirm Password</FormLabel>
                         <FormControl>
-                          <Input type="password" {...field} />
+                          <Input type="password" placeholder="Confirm your password" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -131,59 +130,13 @@ const Signup = () => {
                       <FormItem>
                         <FormLabel>Phone</FormLabel>
                         <FormControl>
-                          <Input type="tel" {...field} />
+                          <Input type="tel" placeholder="Enter your phone number" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={form.control}
-                    name="dateOfBirth"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Date of Birth</FormLabel>
-                        <FormControl>
-                          <Input type="date" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="admin"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <div className="space-y-1 leading-none">
-                          <FormLabel>Admin</FormLabel>
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="housemaid"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <div className="space-y-1 leading-none">
-                          <FormLabel>Housemaid</FormLabel>
-                        </div>
-                      </FormItem>
-                    )}
-                  />
+                  
                   <Button type="submit" className="w-full">Sign Up</Button>
                 </form>
               </Form>
