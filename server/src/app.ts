@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import routes from './routes/routes';
 import auth from './routes/user.routes';
 import book from './routes/book.routes';
+import blogRoutes from './routes/blogRoutes';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
@@ -73,12 +74,16 @@ mongoose.connect(mongoURI, {})
 app.get('/', (req, res) => {
   res.send('Server is up and running!');
 });
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 app.use('/api', routes);
 app.use('/auth', auth);
 app.use('/auth', auth);
 app.use('/auth', auth);
 app.use('/books', book);
+app.use('/uploads',express.static('uploads'));
+app.use('/api/blogs',blogRoutes);
+
 
 
 // Export the app
