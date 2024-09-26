@@ -10,8 +10,11 @@ import blogRoutes from './routes/blogRoutes';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
-import auth from './routes/user.routes'
-// Initialize express app
+
+import auth from './routes/user.routes';
+// Initialize epress app
+import commentRoutes from './routes/commentRoutes';
+
 const app: Application = express();
 
 // Middleware
@@ -85,6 +88,7 @@ app.use('/auth', auth);
 app.use('/api', book);
 app.use('/uploads',express.static('uploads'));
 app.use('/api/blogs',blogRoutes);
+app.use('/api/comments', commentRoutes);
 
 
 
