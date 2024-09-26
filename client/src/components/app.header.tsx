@@ -51,13 +51,17 @@ export default function Header({ isAuthenticated }: { isAuthenticated: boolean }
           <Link href="/" className="text-white hover:text-gray-200">
             Home
           </Link>
+
           <Link href="/housemaid/gethousemaid" className="text-white hover:text-gray-200">
+
             Housemaid
           </Link>
           <Link href="/service" className="text-white hover:text-gray-200">
             Service
           </Link>
+
           <Link href="/blog" className="text-white hover:text-gray-200">
+
             Blog
           </Link>
           <Link href="/contact" className="text-white hover:text-gray-200">
@@ -101,3 +105,4 @@ export default function Header({ isAuthenticated }: { isAuthenticated: boolean }
     </header>
   );
 }
+
