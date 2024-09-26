@@ -24,42 +24,43 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
+// Tạo schema validation
 const formSchema = z.object({
   name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
+    message: "Tên phải có ít nhất 2 ký tự.",
   }),
   province: z.string().min(1, {
-    message: "Please select a province.",
+    message: "Vui lòng chọn tỉnh/thành phố.",
   }),
   district: z.string().min(1, {
-    message: "Please select a district.",
+    message: "Vui lòng chọn quận/huyện.",
   }),
   ward: z.string().min(1, {
-    message: "Please select a ward.",
+    message: "Vui lòng chọn phường/xã.",
   }),
   address: z.string().min(5, {
-    message: "Address must be at least 5 characters.",
+    message: "Địa chỉ phải có ít nhất 5 ký tự.",
   }),
   service: z.string().min(1, {
-    message: "Please select a service.",
+    message: "Vui lòng chọn dịch vụ.",
   }),
   squareMeters: z.string().min(1, {
-    message: "Please select square meters.",
+    message: "Vui lòng chọn diện tích.",
   }),
   phone: z.string().min(10, {
-    message: "Phone number must be at least 10 digits.",
+    message: "Số điện thoại phải có ít nhất 10 số.",
   }),
   price: z.string().min(1, {
-    message: "Please select price.",
+    message: "Vui lòng chọn giá.",
   }),
-  // Remove validation for price field since it's calculated automatically
 });
 
+// Form booking dịch vụ
 const Booking = () => {
   const { districts, wards, fetchDistricts, fetchWards } = useAddressData();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [total, setTotal] = useState(0); // State to manage total amount
+  const [total, setTotal] = useState(0); // Quản lý tổng giá
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -96,38 +97,39 @@ const Booking = () => {
   const handleSquareMetersChange = (value: string) => {
     form.setValue("squareMeters", value);
 
-    // Calculate price based on selected square meters
+    // Tính toán giá dựa trên diện tích đã chọn
     let price = 0;
     switch (value) {
       case "30":
-        price = 100; // Example price for 0-30m
+        price = 100; // Giá cho 0-30m
         break;
       case "60":
-        price = 200; // Example price for 30-60m
+        price = 200; // Giá cho 30-60m
         break;
       case "100":
-        price = 300; // Example price for 60-100m
+        price = 300; // Giá cho 60-100m
         break;
-      case "101": // Example price for more than 100m
+      case "101": // Giá cho hơn 100m
         price = 400;
         break;
       default:
         price = 0;
     }
     setTotal(price);
-    form.setValue("price", price.toString()); // Set the calculated price to total state
+    form.setValue("price", price.toString()); // Set giá vào form
   };
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setError("");
     setSuccess("");
-  
+
     const token = localStorage.getItem("token");
-  
+
     if (!token) {
-      setError("You must be logged in to create a booking.");
+      setError("Bạn phải đăng nhập để đặt dịch vụ.");
       return;
     }
-  
+
     try {
       const response = await axios.post(
         "http://localhost:8080/api/create",
@@ -138,54 +140,58 @@ const Booking = () => {
           },
         }
       );
-      setSuccess("Booking created successfully!");
+      setSuccess("Đặt dịch vụ thành công!");
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        setError(`Error creating booking: ${error.response.data.message}`);
+        setError(`Lỗi khi đặt dịch vụ: ${error.response.data.message}`);
       } else {
-        setError("Error creating booking. Please try again.");
+        setError("Có lỗi xảy ra khi đặt dịch vụ. Vui lòng thử lại.");
       }
       console.error("Error:", error);
     }
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Book a Service</h2>
+    <div className="container mx-auto p-6 bg-white rounded-lg shadow-lg transform transition-all hover:scale-105">
+      <h2 className="text-3xl font-bold mb-6 text-center text-gray-700">
+        Đặt Dịch Vụ
+      </h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          {/* Name Field */}
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Tên</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} placeholder="Nhập tên của bạn" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
+          {/* Address Section */}
           <div className="grid grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="province"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Province</FormLabel>
+                  <FormLabel>Tỉnh/Thành phố</FormLabel>
                   <Select
                     onValueChange={handleProvinceChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select Province" />
+                        <SelectValue placeholder="Chọn tỉnh/thành phố" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="48">Da Nang</SelectItem>
+                      <SelectItem value="48">Đà Nẵng</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -198,7 +204,7 @@ const Booking = () => {
               name="district"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>District</FormLabel>
+                  <FormLabel>Quận/Huyện</FormLabel>
                   <Select
                     onValueChange={handleDistrictChange}
                     defaultValue={field.value}
@@ -206,7 +212,7 @@ const Booking = () => {
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select District" />
+                        <SelectValue placeholder="Chọn quận/huyện" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -226,12 +232,13 @@ const Booking = () => {
             />
           </div>
 
+          {/* Ward Field */}
           <FormField
             control={form.control}
             name="ward"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Ward</FormLabel>
+                <FormLabel>Phường/Xã</FormLabel>
                 <Select
                   onValueChange={handleWardChange}
                   defaultValue={field.value}
@@ -239,7 +246,7 @@ const Booking = () => {
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select Ward" />
+                      <SelectValue placeholder="Chọn phường/xã" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -255,117 +262,128 @@ const Booking = () => {
             )}
           />
 
+          {/* Address */}
           <FormField
             control={form.control}
             name="address"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Address</FormLabel>
+                <FormLabel>Địa chỉ</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} placeholder="Nhập địa chỉ của bạn" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="service"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Service</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Service" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="cleaning">Cleaning</SelectItem>
-                    <SelectItem value="maintenance">Maintenance</SelectItem>
-                    <SelectItem value="gardening">Gardening</SelectItem>
-                    <SelectItem value="laundry">Laundry</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {/* Service and Square Meters */}
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="service"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Dịch vụ</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn dịch vụ" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="cleaning">Dọn dẹp</SelectItem>
+                      <SelectItem value="maintenance">Bảo trì</SelectItem>
+                      <SelectItem value="gardening">Chăm sóc vườn</SelectItem>
+                      <SelectItem value="laundry">Giặt là</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="squareMeters"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Square Meters</FormLabel>
-                <Select
-                  onValueChange={handleSquareMetersChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Square Meters" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="30">0-30m</SelectItem>
-                    <SelectItem value="60">30-60m</SelectItem>
-                    <SelectItem value="100">60-100m</SelectItem>
-                    <SelectItem value="101">100m+</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="squareMeters"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Diện tích</FormLabel>
+                  <Select
+                    onValueChange={handleSquareMetersChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn diện tích" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="30">0-30m</SelectItem>
+                      <SelectItem value="60">30-60m</SelectItem>
+                      <SelectItem value="100">60-100m</SelectItem>
+                      <SelectItem value="101">100m+</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
+          {/* Phone Field */}
           <FormField
             control={form.control}
             name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Phone</FormLabel>
+                <FormLabel>Số điện thoại</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} placeholder="Nhập số điện thoại" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          {/* Display total price */}
+          {/* Total Price */}
           <FormField
             control={form.control}
             name="price"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Total Price</FormLabel>
+                <FormLabel>Tổng giá</FormLabel>
                 <FormControl>
-                  <Input {...field} disabled />
+                  <Input {...field} disabled placeholder="Tổng tiền" />
                 </FormControl>
               </FormItem>
             )}
           />
 
+          {/* Error and Success Alerts */}
           {error && (
-            <Alert variant="destructive">
-              <AlertTitle>Error</AlertTitle>
+            <Alert variant="destructive" className="mt-4">
+              <AlertTitle>Lỗi</AlertTitle>
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
 
           {success && (
-            <Alert variant="default">
-              <AlertTitle>Success</AlertTitle>
+            <Alert variant="default" className="mt-4">
+              <AlertTitle>Thành công</AlertTitle>
               <AlertDescription>{success}</AlertDescription>
             </Alert>
           )}
 
-          <Button type="submit">Submit</Button>
+          <Button
+            type="submit"
+            className="bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 py-3 px-6 rounded-lg"
+          >
+            Đặt Dịch Vụ
+          </Button>
         </form>
       </Form>
     </div>

@@ -104,13 +104,12 @@ export const getProfile = async (req: Request, res: Response) => {
 
 export const updateProfile = async (req: Request, res: Response) => {
   try {
-    const { username, email, avatar } = req.body;
+    const { name, phone } = req.body; // Đảm bảo rằng chỉ có name và phone được gửi trong yêu cầu
 
     const updateData: {[key: string]: any} = {};
 
-    if(username) updateData.username = username;
-    if(email) updateData.email = email;
-    if(avatar) updateData.avatar = avatar;
+    if(name) updateData.username = name; // Đảm bảo rằng tên được cập nhật thành name
+    if(phone) updateData.phone = phone; // Đảm bảo rằng số điện thoại được cập nhật thành phone
 
     const user = await User.findByIdAndUpdate(
       req.user!.id,
@@ -123,7 +122,6 @@ export const updateProfile = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-
 export const getAllHousemaids = async (req: Request, res: Response) => {
   try {
     const housemaids = await User.find({ roles: 'housemaid' }).select('-password');
