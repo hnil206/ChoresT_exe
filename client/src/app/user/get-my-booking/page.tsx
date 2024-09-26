@@ -78,7 +78,9 @@ const BookingList = () => {
               Square Meters: {booking.squareMeters}
             </p>
             <p className="text-gray-700 mb-2">Price: ${booking.price}</p>
-            <p className="text-gray-700 mb-2">Status: {booking.status}</p>
+            <p className="font-semibold mb-2">
+              Status: <span className={`px-2 py-1 rounded ${getStatusColor(booking.status)}`}>{booking.status}</span>
+            </p>
           </div>
         ))
       ) : (
@@ -86,6 +88,19 @@ const BookingList = () => {
       )}
     </div>
   );
+};
+
+const getStatusColor = (status: string): string => {
+  switch (status.toLowerCase()) {
+    case 'pending':
+      return 'bg-yellow-200 text-yellow-800';
+    case 'confirmed':
+      return 'bg-green-200 text-green-800';
+    case 'cancelled':
+      return 'bg-red-200 text-red-800';
+    default:
+      return 'bg-gray-200 text-gray-800';
+  }
 };
 
 export default BookingList;
