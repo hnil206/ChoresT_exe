@@ -9,16 +9,29 @@ import { ImageUploader } from '@/components/image-upload';
 
 const ProfilePage = () => {
   const [user, setUser] = useState<any>(null);
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const router = useRouter();
   const { isAuthenticated } = useAuth();
 
   useEffect(() => {
-    // if (!isAuthenticated) {
-    //   router.push('/login');
-    // } else {
-      fetchUserProfile();
-    // }
+    fetchUserProfile();
   }, [isAuthenticated, router]);
+
+  const handleProfileEdit = async () => {
+    try {
+      const response = await axios.put('http://localhost:8080/auth/user/update',
+        { name, phone },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        }
+      );
+      console.log('Profile updated:', response.data);
+      fetchUserProfile(); // Refetch user profile to update the state
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
 
   const handleAvatarUpload = async (url: string) => {
     try {
@@ -28,8 +41,8 @@ const ProfilePage = () => {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         }
       );
-      // Handle successful update
       console.log('Profile updated:', response.data);
+      fetchUserProfile(); // Refetch user profile to update the state
     } catch (error) {
       console.error('Error updating profile:', error);
     }
@@ -41,6 +54,8 @@ const ProfilePage = () => {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setUser(response.data);
+      setName(response.data.username); // Set the initial name from the fetched user profile
+      setPhone(response.data.phone); // Set the initial phone from the fetched user profile
     } catch (error) {
       console.error('Error fetching user profile:', error);
     }
@@ -70,16 +85,33 @@ const ProfilePage = () => {
           <div className="space-y-4">
             <div>
               <h3 className="font-semibold">Full name</h3>
-              <p>{user.username}</p>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="border p-2 w-full"
+              />
             </div>
             <div>
               <h3 className="font-semibold">Email</h3>
               <p>{user.email}</p>
             </div>
             <div>
-              <h3 className="font-semibold">Role</h3>
-              <p>{user.roles}</p>
+              <h3 className="font-semibold">Phone</h3>
+              <input
+                type="text"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="border p-2 w-full"
+              />
             </div>
+            <div>
+              <h3 className="font-semibold">Role</h3>
+              <p>{user.roles.join(', ')}</p>
+            </div>
+            <button onClick={handleProfileEdit} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Save Changes
+            </button>
           </div>
         </CardContent>
       </Card>
