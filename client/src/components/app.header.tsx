@@ -1,17 +1,7 @@
-"use client"
-import Link from "next/link";
+"use client";
+import Link from 'next/link';
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { Menu, Home, Briefcase, Info, Phone, UserPlus } from "lucide-react";
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -28,93 +18,85 @@ export default function Header({ isAuthenticated }: { isAuthenticated: boolean }
 
   const handleLogout = async () => {
     await logout();
-    router.push('/login');
+    router.push("/login");
   };
 
   const handleBookClick = () => {
     if (isAuthenticated) {
-      router.push('/book');
+      router.push("/book");
     } else {
-      router.push('/login');
+      router.push("/login");
     }
   };
 
-
   return (
-    <header className="bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg">
-      <div className="container mx-auto flex justify-between items-center py-6 px-8">
-        <div className="text-3xl font-extrabold text-white">
-          <Link href="/" className="flex items-center space-x-2 hover:text-blue-200 transition-colors duration-300">
-            <Image src="/logo.png" alt="Logo" width={40} height={40} className="rounded-full" />
+    <header className="bg-blue-500 shadow-md">
+      <div className="container mx-auto flex justify-between items-center py-4 px-6">
+        
+        <div className="text-2xl font-bold">
+          <Link href="/">
+          <Image
+              src="/image/logo.jpg"
+              alt="logo"
+              width={60}
+              height={60}
+              className="rounded-full"
+            />
             <span>ChoresT</span>
           </Link>
         </div>
-        <NavigationMenu>
-          <NavigationMenuList className="flex items-center justify-between py-4">
-            <div className="flex items-center space-x-4">
-              <Image
-                src="/image/download.jpg"
-                alt="Logo"
-                width={40}
-                height={40}
-              />
-              <NavigationMenuItem>
-                <Link href="/" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Maid Rental
-                  </NavigationMenuLink>
-                </Link>
-                <Link href="/services" className="flex items-center text-blue-600 hover:text-blue-800">
-                  <Briefcase className="mr-2 h-4 w-4" />
-                  Services
-                </Link>
-                <Link href="/about" className="flex items-center text-blue-600 hover:text-blue-800">
-                  <Info className="mr-2 h-4 w-4" />
-                  About
-                </Link>
-                <Link href="/contact" className="flex items-center text-blue-600 hover:text-blue-800">
-                  <Phone className="mr-2 h-4 w-4" />
-                  Contact
-                </Link>
-                <Link href="/signup" className="flex items-center text-blue-600 hover:text-blue-800">
-                  <UserPlus className="mr-2 h-4 w-4" />
-                  Sign Up
-                </Link>
-              </NavigationMenuItem>
-            </div>
-            <div className="flex space-x-2">
-              <NavigationMenuItem>
-                <Button variant="outline" onClick={handleBookClick}>
-                  Book a Maid
-                </Button>
-              </NavigationMenuItem>
-              {isAuthenticated ? (
-                <>
-                <NavigationMenuItem>
-                  <Link href="/profile" legacyBehavior passHref>
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                      Profile
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <Button variant="outline" onClick={handleLogout}>
-                    Logout
-                  </Button>
-                </NavigationMenuItem>
-                </>
-              ) : (
-                <NavigationMenuItem>
-                  <Link href="/login" legacyBehavior passHref>
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+
+        {/* Navigation */}
+        <nav className="flex space-x-6">
+          <Link href="/" className="text-white hover:text-gray-200">
+            Home
+          </Link>
+          <Link href="/housemaid/gethousemaid" className="text-white hover:text-gray-200">
+            Housemaid
+          </Link>
+          <Link href="/service" className="text-white hover:text-gray-200">
+            Service
+          </Link>
+          <Link href="/blog" className="text-white hover:text-gray-200">
+            Blog
+          </Link>
+          <Link href="/contact" className="text-white hover:text-gray-200">
+            Contact
+          </Link>
+        </nav>
+
+      
+        <div className="flex space-x-4">
+        {isAuthenticated ? (
+                <NavigationMenu>
+                  <NavigationMenuItem>
+                    <Link href="/profile" legacyBehavior passHref>
+                      <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                        Profile
+                      </NavigationMenuLink>
+                    </Link>
+                  </NavigationMenuItem>
+                  <NavigationMenuItem>
+                    <Button variant="outline" onClick={handleLogout}>
+                      Logout
+                    </Button>
+                  </NavigationMenuItem>
+                </NavigationMenu>
+              ):(
+                <NavigationMenu>
+                  <NavigationMenuItem>
+                    <Link href="/login" className="bg-white text-black px-4 py-2 rounded-md hover:bg-blue-700">
                       Login
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
+                    </Link>
+                  </NavigationMenuItem>
+                  <NavigationMenuItem>
+                    <Link href="/signup" className="bg-white text-black px-4 py-2 rounded-md hover:bg-blue-700">
+                      Sign Up
+                    </Link>
+                  </NavigationMenuItem>
+                </NavigationMenu>
               )}
-            </div>
-          </NavigationMenuList>
-        </NavigationMenu>
+        </div>
       </div>
     </header>
   );
