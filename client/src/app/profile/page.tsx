@@ -20,7 +20,7 @@ const ProfilePage = () => {
 
   const handleProfileEdit = async () => {
     try {
-      const response = await axios.put('http://localhost:8080/auth/user/update',
+      const response = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/auth/user/update`, 
         { name, phone },
         {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
@@ -35,7 +35,7 @@ const ProfilePage = () => {
 
   const handleAvatarUpload = async (url: string) => {
     try {
-      const response = await axios.put('http://localhost:8080/auth/user/update', 
+      const response = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/auth/user/update`,    
         { avatar: url }, 
         {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
@@ -50,7 +50,7 @@ const ProfilePage = () => {
 
   const fetchUserProfile = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/auth/user/profile', {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/user/profile`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setUser(response.data);

@@ -91,7 +91,7 @@ const Comment: React.FC<CommentProps> = ({ housemaidId }) => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/comments/${housemaidId}`
+        `${process.env.NEXT_PUBLIC_API_URL}/comments/${housemaidId}` 
       );
       setComments(response.data);
     } catch (error) {
@@ -115,7 +115,7 @@ const Comment: React.FC<CommentProps> = ({ housemaidId }) => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        "http://localhost:8080/api/comments",
+        `${process.env.NEXT_PUBLIC_API_URL}/comments`, 
         {
           housemaidId,
           content: newComment,
@@ -150,7 +150,7 @@ const Comment: React.FC<CommentProps> = ({ housemaidId }) => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:8080/api/comments/${commentId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/comments/${commentId}`, 
         {
           content,
           rating,
@@ -177,7 +177,7 @@ const Comment: React.FC<CommentProps> = ({ housemaidId }) => {
   const handleDelete = async (commentId: string) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:8080/api/comments/${commentId}`, {
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/comments/${commentId}`, { 
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchComments();

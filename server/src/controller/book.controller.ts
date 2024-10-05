@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 // Create a new book entry, only accessible by authorized housemaid users
 export const createBook = async (req: Request, res: Response) => {
   try {
-    const { name, phone, address, service, squareMeters, price } = req.body;
+    const { name, phone, address, service, squareMeters, price, date, time } = req.body;
 
     if (!req.user) {
       return res.status(401).json({ message: 'Unauthorized' });
@@ -20,7 +20,11 @@ export const createBook = async (req: Request, res: Response) => {
       squareMeters,
       price,
       userId: req.user.id, // Use req.user.id
+      date,
+      time, 
     });
+
+    console.log(newBook, 'haha');
 
     await newBook.save();
 
@@ -63,6 +67,8 @@ export const getBooks = async (req: Request, res: Response) => {
         price: book.price,  
         createdAt: book.createdAt,
         status: book.status,
+        date: book.date,
+        time: book.time,
       })),
     });
   } catch (error) {

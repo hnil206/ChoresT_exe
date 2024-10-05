@@ -37,6 +37,14 @@ const bookSchema = new Schema({
     default: 'processing',
     required: true,
   },
+  date: {
+    type: Date,
+    required: true,
+  },
+  time: {
+    type: String,
+    required: true,
+  },
 }, { timestamps: true });
 
 // Create the Book model from the schema

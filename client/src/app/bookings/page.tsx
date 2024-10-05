@@ -15,8 +15,13 @@ interface Booking {
   squareMeters: string;
   price: string;
   status: string;
+  date: string;
+  time: string;
 }
-
+const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString(); // Format to 'MM/DD/YYYY' or similar based on locale
+};
 const BookingList = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
@@ -31,7 +36,7 @@ const BookingList = () => {
         setErrorMessage("You must be logged in to view bookings.");
         return;
       }
-      const response = await axios.get("http://localhost:8080/api/bookings", {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/books/bookings`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -53,7 +58,7 @@ const BookingList = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        "http://localhost:8080/api/update-status",
+        `${process.env.NEXT_PUBLIC_API_URL}/books/update-status`, 
         { _id: bookingId, status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -99,19 +104,23 @@ const BookingList = () => {
                 <th className="py-3 px-4 text-left">Square Meters</th>
                 <th className="py-3 px-4 text-left">Price</th>
                 <th className="py-3 px-4 text-left">Status</th>
+                <th className="py-3 px-4 text-left">Date</th>
+                <th className="py-3 px-4 text-left">Time</th>
                 {isAuthenticated && <th className="py-3 px-4 text-left">Actions</th>}
               </tr>
             </thead>
             <tbody>
               {bookings.map((booking) => (
-                <tr key={booking.id} className="border-t border-muted-foreground">
+                <tr key={booking.id} className="border-t border-muted-foreground hover:bg-gray-100 transition-colors">
                   <td className="py-3 px-4">{booking.name}</td>
                   <td className="py-3 px-4">{booking.phone}</td>
                   <td className="py-3 px-4">{booking.address}</td>
                   <td className="py-3 px-4">{booking.service}</td>
                   <td className="py-3 px-4">{booking.squareMeters}</td>
                   <td className="py-3 px-4">${booking.price}</td>
-                  <td className="py-3 px-4">{booking.status}</td>
+                  <td className="py-3 px-4">{booking.status}</td> 
+                  <td className="py-3 px-4">{formatDate(booking.date)}</td> 
+                  <td className="py-3 px-4">{booking.time}</td>
                   {isAuthenticated && (
                     <td className="py-3 px-4">
                       <div className="flex space-x-2">
@@ -119,6 +128,7 @@ const BookingList = () => {
                           onClick={() => updateBookingStatus(booking.id, "accepted")}
                           variant="default"
                           size="sm"
+                          className="hover:bg-green-500 hover:text-white transition-colors"
                         >
                           Accept
                         </Button>
@@ -126,6 +136,7 @@ const BookingList = () => {
                           onClick={() => updateBookingStatus(booking.id, "rejected")}
                           variant="destructive"
                           size="sm"
+                          className="hover:bg-red-500 hover:text-white transition-colors"
                         >
                           Reject
                         </Button>

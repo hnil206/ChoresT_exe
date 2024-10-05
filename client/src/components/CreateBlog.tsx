@@ -24,7 +24,7 @@ function CreateBlog({ onBlogCreated }: CreateBlogProps) {
     }
 
     try {
-      await axios.post('http://localhost:8080/api/blogs', formData, {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/blogs`, formData, { 
         headers: {
           'Content-Type': 'multipart/form-data',
         },
