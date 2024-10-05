@@ -27,7 +27,8 @@ const Login = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post('http://localhost:8080/auth/login', values);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, values); 
+
 
       if (response.data && response.data.accessToken) {
         localStorage.setItem('token', response.data.accessToken); // Ensure correct key and value

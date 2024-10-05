@@ -23,6 +23,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 // Tạo schema validation
 const formSchema = z.object({
@@ -53,6 +55,12 @@ const formSchema = z.object({
   price: z.string().min(1, {
     message: "Vui lòng chọn giá.",
   }),
+  date: z.date().min(new Date(), {
+    message: "Vui lòng chọn ngày hợp lệ.",
+  }),
+  time: z.string().min(1, {
+    message: "Vui lòng chọn thời gian.",
+  }),
 });
 
 // Form booking dịch vụ
@@ -61,6 +69,7 @@ const Booking = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [total, setTotal] = useState(0); // Quản lý tổng giá
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -74,6 +83,8 @@ const Booking = () => {
       squareMeters: "",
       phone: "",
       price: "",
+      date: new Date(),
+      time: "",
     },
   });
 
@@ -132,8 +143,8 @@ const Booking = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/create",
-        values,
+        `${process.env.NEXT_PUBLIC_API_URL}/books/create`,
+        { ...values, date: selectedDate },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -152,7 +163,7 @@ const Booking = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 bg-white rounded-lg shadow-lg transform transition-all hover:scale-105">
+    <div className="container mx-auto p-6 bg-white rounded-lg shadow-lg transform transition-all">
       <h2 className="text-3xl font-bold mb-6 text-center text-gray-700">
         Đặt Dịch Vụ
       </h2>
@@ -359,6 +370,34 @@ const Booking = () => {
                 <FormControl>
                   <Input {...field} disabled placeholder="Tổng tiền" />
                 </FormControl>
+              </FormItem>
+            )}
+          />
+
+          {/* Date and Time Field */}
+          <FormField
+            control={form.control}
+            name="date"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Ngày và Thời gian</FormLabel>
+                <FormControl>
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={(date) => {
+                      if (date) {
+                        setSelectedDate(date);
+                        form.setValue("date", date);
+                        form.setValue("time", date.toLocaleTimeString());
+                      }
+                    }}
+                    showTimeSelect
+                    dateFormat="Pp"
+                    placeholderText="Chọn ngày và thời gian"
+                    className="border border-gray-300 rounded-md p-2 w-full"
+                  />
+                </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
