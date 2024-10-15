@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ const Contact = () => {
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -25,26 +27,35 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccess('');
+    setIsSubmitting(true);
 
-    // Validation logic here (cơ bản, bạn có thể cải thiện)
     if (!formData.name || !formData.email || !formData.message) {
       setError('Please fill out all required fields.');
+      setIsSubmitting(false);
       return;
     }
 
-    // Xử lý gửi form (fake thành công ở đây)
-    toast.success('Your message has been sent successfully!');
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      message: '',
-    });
-    window.location.reload();
+    try {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/contact`, formData);
+      if (response.status === 200) {
+        setSuccess('Your message has been sent successfully!');
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          message: '',
+        });
+        setIsSubmitting(false);
+      }
+    } catch (error) {
+      setError('An error occurred while sending your message. Please try again.');
+      console.error('Error sending message:', error);
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -64,6 +75,7 @@ const Contact = () => {
             onChange={handleChange}
             placeholder="Enter your name"
             className="mt-1 block w-full"
+            aria-label="Your Name"
           />
         </div>
 
@@ -124,8 +136,12 @@ const Contact = () => {
         )}
 
         {/* Submit Button */}
-        <Button type="submit" className="w-full bg-blue-600 text-white hover:bg-blue-700 transition-colors">
-          Send Message
+        <Button 
+          type="submit" 
+          className="w-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? 'Sending...' : 'Send Message'}
         </Button>
       </form>
     </div>
