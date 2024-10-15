@@ -3,18 +3,19 @@ const Blog = require('../model/Blog');
 
 export const createBlog = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { title, content, image, date } = req.body; // Thêm date vào đây
+        const { title, content, image } = req.body; // Thêm date vào đây
 
         const newBlog = new Blog({
             title,
             content,
             image,
-            date, // Lưu trường date
+            date: new Date()
         });
 
         await newBlog.save();
         res.status(201).json({ message: 'Blog created successfully', blog: newBlog });
     } catch (error) {
+        console.error(error);
         res.status(500).json({ message: 'Error creating blog', error });
     }
 };

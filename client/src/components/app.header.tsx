@@ -100,18 +100,18 @@ const handlebookingrequested = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem onClick={handleMyBooking}>
-                    <Calendar className="mr-2" /> my Booking
+                    my Booking
                   </DropdownMenuItem>
                   {isHousemaid && (
                     <DropdownMenuItem onClick={handlebookingrequested}>
-                      <FileText className="mr-2" /> Booking Requested
+                      Booking Requested
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuItem onClick={handleProfile}>
-                    <User className="mr-2" /> profile
+                    profile
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleLogout}>
-                    <LogOut className="mr-2" /> Logout
+                    Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -120,12 +120,12 @@ const handlebookingrequested = () => {
             <NavigationMenu>
               <NavigationMenuItem>
                 <Link href="/login" className="bg-white text-black px-4 py-2 rounded-md hover:bg-blue-700 hover:scale-105 transition-transform duration-200">
-                  <Key className="mr-2" /> Login
+                  Login
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <Link href="/signup" className="bg-white text-black px-4 py-2 rounded-md hover:bg-blue-700 hover:scale-105 transition-transform duration-200">
-                  <FileText className="mr-2" /> Sign Up
+                  Sign Up
                 </Link>
               </NavigationMenuItem>
             </NavigationMenu>
