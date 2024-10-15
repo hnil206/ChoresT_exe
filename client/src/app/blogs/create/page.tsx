@@ -1,17 +1,12 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import CreateBlog from '../../../components/CreateBlog';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function CreateBlogPage() {
   const router = useRouter();
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const handleBlogCreated = () => {
     router.push('/blogs');
@@ -27,7 +22,7 @@ export default function CreateBlogPage() {
         </Link>
       </div>
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        {isClient && <CreateBlog onBlogCreated={handleBlogCreated} />}
+        <CreateBlog onBlogCreated={handleBlogCreated} />
       </div>
     </div>
   );
