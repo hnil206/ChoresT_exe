@@ -1,9 +1,10 @@
-'use client';
-
-import React from 'react';
-import CreateBlog from '../../../components/CreateBlog';
-import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
+
+const CreateBlog = dynamic(() => import('../../../components/CreateBlog'), {
+  ssr: false,
+});
 
 export default function CreateBlogPage() {
   const router = useRouter();
@@ -16,9 +17,11 @@ export default function CreateBlogPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6">
         <Link href="/blogs">
-          <button className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
-            Back to Blogs
-          </button>
+          <a>
+            <button className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
+              Back to Blogs
+            </button>
+          </a>
         </Link>
       </div>
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
