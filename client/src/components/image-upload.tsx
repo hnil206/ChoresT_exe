@@ -29,7 +29,7 @@ export function ImageUploader({ onUploadSuccess }: ImageUploaderProps) {
           onClick={() => open()}
           className="flex items-center justify-center rounded-full"
         >
-          <Image className="" />
+          <Upload />
           
         </button>
       )}
