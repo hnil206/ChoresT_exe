@@ -61,7 +61,7 @@ const Contact = () => {
   return (
     <div className="container mx-auto p-6 bg-white rounded-lg shadow-lg max-w-xl mt-10">
       <h2 className="text-3xl font-bold mb-4 text-center text-gray-800">Contact Us</h2>
-      <p className="text-center text-gray-600 mb-6">We'd love to hear from you! Please fill out the form below.</p>
+      <p className="text-center text-gray-600 mb-6">We would love to hear from you! Please fill out the form below.</p>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Name */}
