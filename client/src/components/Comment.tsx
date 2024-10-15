@@ -80,7 +80,7 @@ const Comment: React.FC<CommentProps> = ({ housemaidId }) => {
   const [newRating, setNewRating] = useState(5);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { isAuthenticated, login, logout } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -316,7 +316,7 @@ const Comment: React.FC<CommentProps> = ({ housemaidId }) => {
               </div>
             )}
           </CardContent>
-          {isAuthenticated && user && user.id === comment.user._id && (
+          {isAuthenticated && (
             <CardFooter className="justify-end space-x-2">
               <Dialog>
                 <DialogTrigger asChild>
