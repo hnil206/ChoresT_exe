@@ -6,10 +6,10 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 interface Blog {
-  _id: string;
-  title: string;
-  content: string;
-  image: string;
+    _id: string;
+    title: string;
+    content: string;
+    image: string;
 }
 
 export default function BlogList() {
@@ -18,10 +18,11 @@ export default function BlogList() {
     useEffect(() => {
         fetchBlogs();
     }, []);
+    console.log(blogs)
 
     const fetchBlogs = async () => {
         try {
-            const response = await axios.get<Blog[]>(`${process.env.NEXT_PUBLIC_API_URL}/blogs`); 
+            const response = await axios.get<Blog[]>(`${process.env.NEXT_PUBLIC_API_URL}/blogs`);
             setBlogs(response.data);
         } catch (error) {
             console.error('Error fetching blogs:', error);
@@ -39,7 +40,7 @@ export default function BlogList() {
                             {blog.image ? (
                                 <div className={styles.imageContainer}>
                                     <img
-                                        src={`http://localhost:8080/${blog.image}`}
+                                        src={`${blog.image}`}
                                         alt={blog.title}
                                         className={styles.blogImage}
                                     />

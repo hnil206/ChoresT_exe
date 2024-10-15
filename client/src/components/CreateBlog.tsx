@@ -1,8 +1,10 @@
 'use client';
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, FormEvent } from 'react';
 import axios from 'axios';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { CldUploadWidget } from 'next-cloudinary';
+import { ImageUploader } from './image-upload';
 
 interface CreateBlogProps {
   onBlogCreated: () => void;
@@ -11,39 +13,25 @@ interface CreateBlogProps {
 function CreateBlog({ onBlogCreated }: CreateBlogProps) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [image, setImage] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('content', content); // Gửi nội dung HTML nguyên gốc
-    if (image) {
-      formData.append('image', image);
-    }
+    const blogData = {
+      title,
+      content,
+      image: imageUrl
+    };
+
 
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/blogs`, formData, { 
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/blogs`, blogData);
       setTitle('');
       setContent('');
-      setImage(null);
-      setPreviewUrl(null); // Reset preview URL after submission
+      setImageUrl(null);
       onBlogCreated();
     } catch (error) {
       console.error('Error creating blog:', error);
-    }
-  };
-
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      setImage(file);
-      setPreviewUrl(URL.createObjectURL(file));
     }
   };
 
@@ -57,7 +45,7 @@ function CreateBlog({ onBlogCreated }: CreateBlogProps) {
             type="text"
             id="title"
             value={title}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
+            onChange={(e) => setTitle(e.target.value)}
             required
             placeholder="Enter your blog title"
             className="mt-1 block w-full pl-3 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
@@ -65,30 +53,20 @@ function CreateBlog({ onBlogCreated }: CreateBlogProps) {
         </div>
         <div className="form-group">
           <label htmlFor="content" className="block text-sm font-medium text-gray-700">Content:</label>
-          <ReactQuill 
-            theme="snow" 
+          <ReactQuill
+            theme="snow"
             className="h-36"
             value={content}
-            onChange={(value) => setContent(value)} // Corrected to accept the value directly
+            onChange={(value) => setContent(value)}
             placeholder="Write your blog content here..."
           />
         </div>
         <div className="form-group">
-          <label htmlFor="image" className="block text-sm font-medium text-gray-700">Image:</label>
-          <input
-            type="file"
-            id="image"
-            onChange={handleImageChange}
-            accept="image/*"
-            className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4
-                       file:rounded-full file:border-0
-                       file:text-sm file:font-semibold
-                       file:bg-blue-50 file:text-blue-700
-                       hover:file:bg-blue-100"
-          />
-          {previewUrl && (
+          <label className="block text-sm font-medium text-gray-700">Image:</label>
+          <ImageUploader onUploadSuccess={setImageUrl} />
+          {imageUrl && (
             <div className="image-preview mt-4">
-              <img src={previewUrl} alt="Preview" className="rounded-lg shadow-md max-h-64" />
+              <img src={imageUrl} alt="Preview" className="rounded-lg shadow-md max-h-64" />
             </div>
           )}
         </div>
@@ -100,9 +78,9 @@ function CreateBlog({ onBlogCreated }: CreateBlogProps) {
       </form>
       <div className="mt-8">
         <h3 className="text-2xl font-semibold text-gray-700">Preview:</h3>
-        <div 
+        <div
           className="preview-content mt-4 border p-4 rounded"
-          dangerouslySetInnerHTML={{ __html: content }} // Hiển thị nội dung HTML
+          dangerouslySetInnerHTML={{ __html: content }}
         />
       </div>
     </div>
