@@ -18,6 +18,8 @@ interface Booking {
   date: string;
   time: string;
 }
+
+
 const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
   return date.toLocaleDateString(); // Format to 'MM/DD/YYYY' or similar based on locale
@@ -117,7 +119,7 @@ const BookingList = () => {
                   <td className="py-3 px-4">{booking.address}</td>
                   <td className="py-3 px-4">{booking.service}</td>
                   <td className="py-3 px-4">{booking.squareMeters}</td>
-                  <td className="py-3 px-4">${booking.price}</td>
+                  <td className="py-3 px-4">{booking.price} VND</td>
                   <td className="py-3 px-4">{booking.status}</td> 
                   <td className="py-3 px-4">{formatDate(booking.date)}</td> 
                   <td className="py-3 px-4">{booking.time}</td>
