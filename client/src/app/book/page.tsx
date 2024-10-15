@@ -62,6 +62,29 @@ const formSchema = z.object({
     message: "Vui lòng chọn thời gian.",
   }),
 });
+//payment
+const handlePayment = async (_id: string, amount: number, setError: (error: string) => void) => {
+  try {
+    const payload = {
+      amount,
+      orderDescription: `Payment for booking`,
+      orderType: 'billpayment',
+      language: 'vn',
+    };
+
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/payment/create_payment_url`, payload);
+    
+    if (response.data.paymentUrl) {
+      window.location.href = response.data.paymentUrl;
+    } else {
+      setError('Failed to create payment URL');
+    }
+  } catch (error) {
+    console.error('Payment error:', error);
+    setError('An error occurred while processing the payment');
+  }
+};
+
 
 // Form booking dịch vụ
 const Booking = () => {
@@ -112,16 +135,16 @@ const Booking = () => {
     let price = 0;
     switch (value) {
       case "30":
-        price = 100; // Giá cho 0-30m
+        price = 150000; // Giá cho 0-30m
         break;
       case "60":
-        price = 200; // Giá cho 30-60m
+        price = 300000; // Giá cho 30-60m
         break;
       case "100":
-        price = 300; // Giá cho 60-100m
+        price = 500000; // Giá cho 60-100m
         break;
       case "101": // Giá cho hơn 100m
-        price = 400;
+        price = 1000000;
         break;
       default:
         price = 0;
@@ -129,6 +152,7 @@ const Booking = () => {
     setTotal(price);
     form.setValue("price", price.toString()); // Set giá vào form
   };
+
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setError("");
@@ -151,16 +175,16 @@ const Booking = () => {
           },
         }
       );
+
+      console.log('Booking response:', response.data); // Kiểm tra phản hồi ở đây
+      await handlePayment(response.data._id, total, setError);
+
       setSuccess("Đặt dịch vụ thành công!");
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        setError(`Lỗi khi đặt dịch vụ: ${error.response.data.message}`);
-      } else {
-        setError("Có lỗi xảy ra khi đặt dịch vụ. Vui lòng thử lại.");
-      }
-      console.error("Error:", error);
+      // Xử lý lỗi ở đây
     }
   };
+
 
   return (
     <div className="container mx-auto p-6 bg-white rounded-lg shadow-lg transform transition-all">

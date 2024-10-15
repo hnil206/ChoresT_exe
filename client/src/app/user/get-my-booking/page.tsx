@@ -110,7 +110,7 @@ const BookingList = () => {
                 <p className="text-gray-700">Address: {booking.address}</p>
                 <p className="text-gray-700">Service: {booking.service}</p>
                 <p className="text-gray-700">Square Meters: {booking.squareMeters}</p>
-                <p className="text-gray-700">Price: ${booking.price}</p>
+                <p className="text-gray-700">Price: {booking.price} VND</p>
                 <p className="text-gray-700">Date: {formatDate(booking.date)}</p>
                 <p className="text-gray-700">Time: {(booking.time)}</p>
                 <p className="font-semibold">

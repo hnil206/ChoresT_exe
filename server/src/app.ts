@@ -11,7 +11,7 @@ import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 import commentRoutes from './routes/commentRoutes';
-
+import paymentRoutes from './routes/paymentRoutes';
 // Initialize dotenv
 dotenv.config();
 
@@ -69,6 +69,6 @@ app.use('/api/auth', userRoutes);
 app.use('/api/books', book);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/comments', commentRoutes);
-
+app.use('/api/payment', paymentRoutes);
 // Export the app
 export default app;
