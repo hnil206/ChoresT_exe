@@ -80,7 +80,7 @@ const Comment: React.FC<CommentProps> = ({ housemaidId }) => {
   const [newRating, setNewRating] = useState(5);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, login, logout } = useAuth();
   const { toast } = useToast();
 
   useEffect(() => {
