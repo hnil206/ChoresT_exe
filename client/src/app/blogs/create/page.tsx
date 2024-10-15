@@ -1,3 +1,4 @@
+'use client'
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation'; // Updated import
 import Link from 'next/link';
