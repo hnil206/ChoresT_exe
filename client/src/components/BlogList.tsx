@@ -34,8 +34,8 @@ export default function BlogList() {
     return (
         <div className={styles.container}>
             <div className={styles.blogGrid}>
-                {blogs.map((blog) => (
-                    <Link href={`/blogs/${blog._id}`}>
+                {blogs.map((blog, index) => (
+                    <Link key={index} href={`/blogs/${blog._id}`}>
                         <div className={styles.blogCard}>
                             {blog.image ? (
                                 <div className={styles.imageContainer}>
