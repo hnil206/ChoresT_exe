@@ -20,7 +20,7 @@ const useAuth = () => {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await axios.post('http://localhost:8080/auth/login', { email, password }, {
+      const response = await axios.post('/auth/login', { email, password }, {
         withCredentials: true
       });
       if (response.data && response.data.accessToken) {
@@ -36,7 +36,7 @@ const useAuth = () => {
 
   const logout = async () => {
     try {
-      await axios.post('http://localhost:8080/auth/logout', {}, {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {}, {
         withCredentials: true,
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
