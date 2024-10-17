@@ -131,3 +131,19 @@ export const getAllHousemaids = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error fetching housemaids' });
   }
 };
+
+export const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    // Check if the user is an admin
+    if (!req.user || !req.user.roles.includes('admin')) {
+      return res.status(403).json({ message: 'Access denied. Admin only.' });
+    }
+
+    const users = await User.find().select('-password');
+    const userCount = await User.countDocuments();
+    res.json({ users, userCount });
+    console.log(users)
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching users', error });
+  }
+};
