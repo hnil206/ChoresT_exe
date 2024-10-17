@@ -20,7 +20,7 @@ const app: Application = express();
 
 // Middleware
 const corsOptions = {
-  origin: "http://localhost:1234",
+  origin: process.env.CLIENT_URL,
   credentials: true
 };
 
