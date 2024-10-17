@@ -38,7 +38,7 @@ const Signup = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post('http://localhost:8080/auth/signup', values);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup`, values);
       console.log('Signup response:', response.data);
       alert('User registered successfully!');
       router.push('/login');
