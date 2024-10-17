@@ -2,21 +2,26 @@ import { Request, Response } from 'express';
 import qs from 'qs';
 import crypto from 'crypto';
 import { vnpayConfig } from '../config/vnpay';
+import moment from 'moment';
 
 export const createPaymentUrl = (req: Request, res: Response) => {
-  const date = new Date();
-  const createDate = date.getFullYear().toString() +
-    ('0' + (date.getMonth() + 1)).slice(-2) +
-    ('0' + date.getDate()).slice(-2) +
-    ('0' + date.getHours()).slice(-2) +
-    ('0' + date.getMinutes()).slice(-2) +
-    ('0' + date.getSeconds()).slice(-2);
-
-  const orderId = date.getTime().toString();
+  // const date = new Date();
+  // const createDate = date.getFullYear().toString() +
+    // ('0' + (date.getMonth() + 1)).slice(-2) +
+    // ('0' + date.getDate()).slice(-2) +
+    // ('0' + date.getHours()).slice(-2) +
+    // ('0' + date.getMinutes()).slice(-2) +
+    // ('0' + date.getSeconds()).slice(-2);
+    const date = new Date();
+  // const orderId = date.getTime().toString();
   const amount = req.body.amount;
   const orderInfo = req.body.orderDescription;
   const orderType = req.body.orderType;
   const locale = req.body.language || 'vn';
+
+
+  const createDate = moment(date).format("YYYYMMDDHHmmss");
+  const orderId = moment(date).format("DDHHmmss");
 
   const vnp_Params: any = {
     vnp_Version: '2.1.0',
