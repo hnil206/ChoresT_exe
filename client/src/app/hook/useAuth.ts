@@ -20,7 +20,7 @@ const useAuth = () => {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await axios.post('/auth/login', { email, password }, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, { email, password }, {
         withCredentials: true
       });
       if (response.data && response.data.accessToken) {
