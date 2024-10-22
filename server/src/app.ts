@@ -20,8 +20,9 @@ const app: Application = express();
 
 // Middleware
 const corsOptions = {
-  origin: process.env.CLIENT_URL,
-  credentials: true
+  origin: 'http://localhost:1234',
+  credentials: true,
+  optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
