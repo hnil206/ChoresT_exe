@@ -67,13 +67,14 @@ const handlePayment = async (_id: string, amount: number, setError: (error: stri
   try {
     const payload = {
       amount,
-      orderDescription: `Payment for booking`,
+      orderDescription: `Payment for booking ${_id}`,
       orderType: 'billpayment',
-      language: 'vn',
     };
 
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/payment/create_payment_url`, payload);
-    
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/payment/create_payment_link`, payload);
+    console.log(response.data);
+    console.log(response.data.paymentUrl);
+    console.log('cc', payload);
     if (response.data.paymentUrl) {
       window.location.href = response.data.paymentUrl;
     } else {

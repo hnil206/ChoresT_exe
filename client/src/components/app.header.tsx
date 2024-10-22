@@ -26,8 +26,17 @@ import {
 // Import Lucide Icons
 import { User, LogOut, Calendar, FileText, Key } from 'lucide-react';
 
-export default function Header({ isAuthenticated }: { isAuthenticated: boolean }) {
+// Add this import
+import { useEffect } from 'react';
+
+export default function Header({ isAuthenticated, isAdmin }: { isAuthenticated: boolean, isAdmin: boolean }) {
   const router = useRouter();
+
+  useEffect(() => {
+    if (isAuthenticated && isAdmin) {
+      router.push("/admin");
+    }
+  }, [isAuthenticated, isAdmin, router]);
 
   const handleLogout = async () => {
     await logout();
@@ -99,16 +108,24 @@ const handlebookingrequested = () => {
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem onClick={handleMyBooking}>
-                    my Booking
-                  </DropdownMenuItem>
-                  {isHousemaid && (
-                    <DropdownMenuItem onClick={handlebookingrequested}>
-                      Booking Requested
+                  {isAdmin ? (
+                    <DropdownMenuItem onClick={() => router.push("/admin")}>
+                      Admin Dashboard
                     </DropdownMenuItem>
+                  ) : (
+                    <>
+                      <DropdownMenuItem onClick={handleMyBooking}>
+                        My Booking
+                      </DropdownMenuItem>
+                      {isHousemaid && (
+                        <DropdownMenuItem onClick={handlebookingrequested}>
+                          Booking Requested
+                        </DropdownMenuItem>
+                      )}
+                    </>
                   )}
                   <DropdownMenuItem onClick={handleProfile}>
-                    profile
+                    Profile
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleLogout}>
                     Logout

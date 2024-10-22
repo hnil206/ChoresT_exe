@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   useEffect(() => {
     const checkAuth = () => {
@@ -48,7 +49,27 @@ const useAuth = () => {
     }
   };
 
-  return { isAuthenticated, login, logout };
+  const checkAdminStatus = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/check-admin`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setIsAdmin(response.data.isAdmin);
+      }
+    } catch (error) {
+      console.error('Error checking admin status:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      checkAdminStatus();
+    }
+  }, [isAuthenticated]);
+
+  return { isAuthenticated, isAdmin, login, logout };
 };
 
 export default useAuth;

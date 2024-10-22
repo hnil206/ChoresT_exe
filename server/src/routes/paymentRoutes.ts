@@ -1,8 +1,9 @@
 import express from 'express';
-import { createPaymentUrl, handleVNPayReturn } from '../controller/vnpayController';
+import { createPaymentLink, handlePayOSWebhook } from '../controller/payosController';
 
 const router = express.Router();
 
-router.post('/create_payment_url', createPaymentUrl);
-router.get('/vnpay_return', handleVNPayReturn);
+router.post('/create_payment_link', createPaymentLink);
+router.post('/payos_webhook', handlePayOSWebhook);
+
 export default router;

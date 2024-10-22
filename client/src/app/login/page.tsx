@@ -27,20 +27,34 @@ const Login = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, values); 
-
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, values);
 
       if (response.data && response.data.accessToken) {
-        localStorage.setItem('token', response.data.accessToken); // Ensure correct key and value
+        localStorage.setItem('token', response.data.accessToken);
         alert('Login successful');
-        window.location.href = '/';
+        router.push('/'); // Use Next.js router instead of window.location
       } else {
         console.error('No token received:', response.data);
-        throw new Error('No token received from server');
+        alert('Login failed: No token received from server');
       }
     } catch (error: any) {
       console.error('Login error:', error);
-      const errorMessage = error.response?.data?.message || 'Invalid credentials';
+      let errorMessage = 'An error occurred during login';
+
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          errorMessage = error.response.data?.message || 'Server error';
+        } else if (error.request) {
+          // The request was made but no response was received
+          errorMessage = 'No response from server. Please check your internet connection.';
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          errorMessage = error.message;
+        }
+      }
+
       alert(errorMessage);
     }
   };
