@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import Link from 'next/link';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
 
 type Stat = {
   title: string;
@@ -71,29 +72,32 @@ const AdminHome: React.FC = () => {
     fetchBookings();
   }, []);
 
-  
+  const chartData = [
+    { name: 'Users', count: userCount },
+    { name: 'Bookings', count: bookingCount },
+  ];
 
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
       <aside className="w-64 bg-white shadow-md">
-        <div className="p-4">
+        <div className="p-6">
           <h1 className="text-2xl font-bold text-primary">MaidRental</h1>
         </div>
-        <nav className="mt-8">
+        <nav className="mt-6">
           {['Dashboard', 'Bookings', 'Maids', 'Customers', 'Settings'].map((item) => (
             <button
               key={item}
-              className={`flex items-center w-full px-4 py-2 text-left ${
+              className={`flex items-center w-full px-6 py-3 text-left ${
                 activePage === item ? 'bg-primary text-primary-foreground' : 'text-gray-600 hover:bg-gray-100'
               }`}
               onClick={() => setActivePage(item)}
             >
-              {item === 'Dashboard' && <Home className="mr-2 h-4 w-4" />}
-              {item === 'Bookings' && <Calendar className="mr-2 h-4 w-4" />}
-              {item === 'Maids' && <Users className="mr-2 h-4 w-4" />}
-              {item === 'Customers' && <Users className="mr-2 h-4 w-4" />}
-              {item === 'Settings' && <Settings className="mr-2 h-4 w-4" />}
+              {item === 'Dashboard' && <Home className="mr-3 h-5 w-5" />}
+              {item === 'Bookings' && <Calendar className="mr-3 h-5 w-5" />}
+              {item === 'Maids' && <Users className="mr-3 h-5 w-5" />}
+              {item === 'Customers' && <Users className="mr-3 h-5 w-5" />}
+              {item === 'Settings' && <Settings className="mr-3 h-5 w-5" />}
               {item}
             </button>
           ))}
@@ -103,16 +107,16 @@ const AdminHome: React.FC = () => {
       {/* Main content */}
       <main className="flex-1 overflow-y-auto">
         {/* Admin Header */}
-        <header className="bg-white shadow-sm"></header>
+        <header className="bg-white shadow-sm">
           <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
             <h1 className="text-2xl font-semibold text-gray-900">{activePage}</h1>
             <div className="flex items-center">
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="mr-4">
                 <Bell className="h-5 w-5" />
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="ml-4 flex items-center">
+                  <Button variant="ghost" className="flex items-center">
                     <Avatar className="h-8 w-8 mr-2">
                       <AvatarImage src="/placeholder-admin.jpg" alt="Admin" />
                       <AvatarFallback>AD</AvatarFallback>
@@ -134,17 +138,77 @@ const AdminHome: React.FC = () => {
               </DropdownMenu>
             </div>
           </div>
+        </header>
         
         {/* Dashboard content */}
-        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-          {/* Stats overview */}
-          <Link href="/admin/listusers">
-          <h2 className="text-lg font-semibold text-gray-900 mt-8 mb-4">Total Registered Users: {userCount}</h2>
-          </Link>
-          
-          <Link href="/admin/listbookings">
-          <h2 className="text-lg font-semibold text-gray-900 mt-8 mb-4">Total Bookings: {bookingCount}</h2>
-          </Link>
+        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="bg-white shadow-lg rounded-lg overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4">
+                <CardTitle className="text-lg font-semibold">Total Registered Users</CardTitle>
+              </CardHeader>
+              <CardContent className="p-4">
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={[{ name: 'Users', count: userCount }]}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Line type="monotone" dataKey="count" stroke="#3b82f6" strokeWidth={2} activeDot={{ r: 8 }} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+                <Link href="/admin/listusers" className="mt-4 inline-block">
+                  <Button variant="outline" className="w-full">View All Users</Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white shadow-lg rounded-lg overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-green-500 to-green-600 text-white p-4">
+                <CardTitle className="text-lg font-semibold">Total Bookings</CardTitle>
+              </CardHeader>
+              <CardContent className="p-4">
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={[{ name: 'Bookings', count: bookingCount }]}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Line type="monotone" dataKey="count" stroke="#10b981" strokeWidth={2} activeDot={{ r: 8 }} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+                <Link href="/admin/listbookings" className="mt-4 inline-block">
+                  <Button variant="outline" className="w-full">View All Bookings</Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
+
+          <Card className="mt-6 bg-white shadow-lg rounded-lg overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-4">
+              <CardTitle className="text-lg font-semibold">Overview</CardTitle>
+            </CardHeader>
+            <CardContent className="p-4">
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line type="monotone" dataKey="count" stroke="#8b5cf6" strokeWidth={2} activeDot={{ r: 8 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </main>
     </div>
