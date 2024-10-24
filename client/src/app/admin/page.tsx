@@ -30,6 +30,10 @@ type User = {
   createdAt: string;
 }
 
+interface TotalPriceResponse {
+  totalPrice: number;
+}
+
 const AdminHome: React.FC = () => {
   const [activePage, setActivePage] = useState<string>('Dashboard')
   const [users, setUsers] = useState<User[]>([])
@@ -38,6 +42,7 @@ const AdminHome: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [bookingCount, setBookingCount] = useState<number>(0)
+  const [totalPrice, setTotalPrice] = useState<number>(0);
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -67,9 +72,19 @@ const AdminHome: React.FC = () => {
         setLoading(false);
       }
     };
+    const fetchTotalPrice = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get<TotalPriceResponse>(`${process.env.NEXT_PUBLIC_API_URL}/books/total-price`, { headers: { Authorization: `Bearer ${token}` } });
+        setTotalPrice(response.data.totalPrice);
+      } catch (error) {
+        console.error('Error fetching total price:', error);
+      }
+    };
 
     fetchUsers();
     fetchBookings();
+    fetchTotalPrice();
   }, []);
 
   const chartData = [
@@ -141,74 +156,16 @@ const AdminHome: React.FC = () => {
         </header>
         
         {/* Dashboard content */}
-        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="bg-white shadow-lg rounded-lg overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4">
-                <CardTitle className="text-lg font-semibold">Total Registered Users</CardTitle>
-              </CardHeader>
-              <CardContent className="p-4">
-                <div className="h-64">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={[{ name: 'Users', count: userCount }]}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Line type="monotone" dataKey="count" stroke="#3b82f6" strokeWidth={2} activeDot={{ r: 8 }} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-                <Link href="/admin/listusers" className="mt-4 inline-block">
-                  <Button variant="outline" className="w-full">View All Users</Button>
-                </Link>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white shadow-lg rounded-lg overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-green-500 to-green-600 text-white p-4">
-                <CardTitle className="text-lg font-semibold">Total Bookings</CardTitle>
-              </CardHeader>
-              <CardContent className="p-4">
-                <div className="h-64">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={[{ name: 'Bookings', count: bookingCount }]}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Line type="monotone" dataKey="count" stroke="#10b981" strokeWidth={2} activeDot={{ r: 8 }} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-                <Link href="/admin/listbookings" className="mt-4 inline-block">
-                  <Button variant="outline" className="w-full">View All Bookings</Button>
-                </Link>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Card className="mt-6 bg-white shadow-lg rounded-lg overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-4">
-              <CardTitle className="text-lg font-semibold">Overview</CardTitle>
-            </CardHeader>
-            <CardContent className="p-4">
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Line type="monotone" dataKey="count" stroke="#8b5cf6" strokeWidth={2} activeDot={{ r: 8 }} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+          {/* Stats overview */}
+          <Link href="/admin/listusers">
+          <h2 className="text-lg font-semibold text-gray-900 mt-8 mb-4">Total Registered Users: {userCount}</h2>
+          </Link>
+          
+          <Link href="/admin/listbookings">
+          <h2 className="text-lg font-semibold text-gray-900 mt-8 mb-4">Total Bookings: {bookingCount}</h2>
+          </Link>
+          <h2 className="text-lg font-semibold text-gray-900 mt-8 mb-4">Total Revenue: {totalPrice} VND</h2>
         </div>
       </main>
     </div>
