@@ -1,3 +1,4 @@
 node_modules
 testpostman.txt
 .vercel
+.env
