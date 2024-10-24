@@ -41,7 +41,7 @@ export const createBook = async (req: Request, res: Response) => {
 // house maid: get all bookings
 export const getBooks = async (req: Request, res: Response) => {
   try {
-    if (!req.user || !req.user.roles.includes('housemaid')) {
+    if (!req.user || !req.user.roles.includes('housemaid') && !req.user.roles.includes('admin')) {
       return res.status(403).json({ message: 'Unauthorized: Housemaid access required' });
     }
 
@@ -144,6 +144,24 @@ export const getMyBookings = async (req: Request, res: Response) => {
     return res.status(500).json({
       message: 'Error fetching user bookings',
       error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+};
+
+
+//admin: get count bookings
+export const getAllBooks = async (req: Request, res: Response) => {
+  try {
+    const totalBookings = await Book.countDocuments();
+    res.status(200).json({
+      message: 'Total bookings fetched successfully',
+      bookingCount: totalBookings,
+    });
+  } catch (error) {
+    console.error('Error fetching total bookings:', error);
+    res.status(500).json({
+      message: 'Error fetching total bookings',
+      error: error instanceof Error ? error.message : 'Unknown error',
     });
   }
 };
