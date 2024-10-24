@@ -28,6 +28,7 @@ import { User, LogOut, Calendar, FileText, Key } from 'lucide-react';
 
 // Add this import
 import { useEffect } from 'react';
+import { any } from 'zod';
 
 export default function Header({ isAuthenticated, isAdmin }: { isAuthenticated: boolean, isAdmin: boolean }) {
   const router = useRouter();
@@ -109,8 +110,9 @@ const handlebookingrequested = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   {isAdmin ? (
-                    <DropdownMenuItem onClick={() => router.push("/admin")}>
-                      Admin Dashboard
+                    
+                    <DropdownMenuItem onClick={() => {}}>
+                      <a href="/admin">Admin Dashboard</a>
                     </DropdownMenuItem>
                   ) : (
                     <>

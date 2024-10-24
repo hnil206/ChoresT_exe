@@ -15,8 +15,8 @@ const formSchema = z.object({
 });
 
 const Login = () => {
-  const router = useRouter();
-  
+  const router = useRouter(); // Initialize the router
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -28,11 +28,17 @@ const Login = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, values);
-
+  
       if (response.data && response.data.accessToken) {
         localStorage.setItem('token', response.data.accessToken);
+        const admin = response.data.roles && response.data.roles.includes('admin');
         alert('Login successful');
-        window.location.href = '/'; // Use Next.js router instead of window.location
+
+        if (admin) {
+          window.location.href = '/admin'; // Redirect to /admin for admin users
+        } else {
+          window.location.href = '/'; // Redirect to home for regular users
+        }
       } else {
         console.error('No token received:', response.data);
         alert('Login failed: No token received from server');
@@ -40,21 +46,17 @@ const Login = () => {
     } catch (error: any) {
       console.error('Login error:', error);
       let errorMessage = 'An error occurred during login';
-
+  
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
           errorMessage = error.response.data?.message || 'Server error';
         } else if (error.request) {
-          // The request was made but no response was received
           errorMessage = 'No response from server. Please check your internet connection.';
         } else {
-          // Something happened in setting up the request that triggered an Error
           errorMessage = error.message;
         }
       }
-
+  
       alert(errorMessage);
     }
   };

@@ -41,7 +41,7 @@ export const createBook = async (req: Request, res: Response) => {
 // house maid: get all bookings
 export const getBooks = async (req: Request, res: Response) => {
   try {
-    if (!req.user || !req.user.roles.includes('housemaid')) {
+    if (!req.user || !req.user.roles.includes('housemaid') && !req.user.roles.includes('admin')) {
       return res.status(403).json({ message: 'Unauthorized: Housemaid access required' });
     }
 
@@ -144,6 +144,53 @@ export const getMyBookings = async (req: Request, res: Response) => {
     return res.status(500).json({
       message: 'Error fetching user bookings',
       error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+};
+
+
+//admin: get count bookings
+export const getAllBooks = async (req: Request, res: Response) => {
+  try {
+    const totalBookings = await Book.countDocuments();
+    res.status(200).json({
+      message: 'Total bookings fetched successfully',
+      bookingCount: totalBookings,
+    });
+  } catch (error) {
+    console.error('Error fetching total bookings:', error);
+    res.status(500).json({
+      message: 'Error fetching total bookings',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
+  }
+};
+
+
+export const getTotalRevenue = async (req: Request, res: Response) => {
+  try {
+    // Kiểm tra xem người dùng đã đăng nhập chưa
+    if (!req.user || !req.user.roles.includes('admin')) {
+      return res.status(403).json({ message: 'Unauthorized: Admin access required' });
+    }
+
+    // Lấy tất cả các đơn đặt
+    const bookings = await Book.find();
+
+    // Tính tổng số tiền
+    const totalPrice = bookings.reduce((total, booking) => {
+      return total + parseFloat(booking.price); // Đảm bảo giá được chuyển đổi thành số
+    }, 0);
+
+    return res.status(200).json({
+      message: 'Total revenue calculated successfully',
+      totalPrice,
+    });
+  } catch (error) {
+    console.error('Error calculating total revenue:', error);
+    return res.status(500).json({
+      message: 'Error calculating total revenue',
+      error: error instanceof Error ? error.message : 'Unknown error',
     });
   }
 };
