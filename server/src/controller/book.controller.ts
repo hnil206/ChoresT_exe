@@ -165,3 +165,32 @@ export const getAllBooks = async (req: Request, res: Response) => {
     });
   }
 };
+
+
+export const getTotalRevenue = async (req: Request, res: Response) => {
+  try {
+    // Kiểm tra xem người dùng đã đăng nhập chưa
+    if (!req.user || !req.user.roles.includes('admin')) {
+      return res.status(403).json({ message: 'Unauthorized: Admin access required' });
+    }
+
+    // Lấy tất cả các đơn đặt
+    const bookings = await Book.find();
+
+    // Tính tổng số tiền
+    const totalPrice = bookings.reduce((total, booking) => {
+      return total + parseFloat(booking.price); // Đảm bảo giá được chuyển đổi thành số
+    }, 0);
+
+    return res.status(200).json({
+      message: 'Total revenue calculated successfully',
+      totalPrice,
+    });
+  } catch (error) {
+    console.error('Error calculating total revenue:', error);
+    return res.status(500).json({
+      message: 'Error calculating total revenue',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
+  }
+};
