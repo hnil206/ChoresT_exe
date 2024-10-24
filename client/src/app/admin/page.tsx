@@ -7,7 +7,10 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import Link from 'next/link';
+
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+
+
 
 type Stat = {
   title: string;
@@ -92,7 +95,9 @@ const AdminHome: React.FC = () => {
   const chartData = [
     { name: 'Users', value: userCount },
     { name: 'Bookings', value: bookingCount },
+
     { name: 'Revenue', value: totalPrice / 1000000 }, // Convert to millions for better visualization
+
   ];
 
   return (
@@ -161,6 +166,7 @@ const AdminHome: React.FC = () => {
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           {/* Stats overview */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
             <Card className="bg-blue-50 border-blue-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium text-blue-600">Total Registered Users</CardTitle>
@@ -195,11 +201,13 @@ const AdminHome: React.FC = () => {
                 <p className="text-xs text-purple-600 mt-1">
                   Total earnings to date
                 </p>
+
               </CardContent>
             </Card>
           </div>
 
           {/* Charts */}
+
           <Card className="mb-8">
             <CardHeader>
               <CardTitle className="text-xl font-semibold text-gray-800">Overview</CardTitle>
@@ -217,6 +225,9 @@ const AdminHome: React.FC = () => {
               </ResponsiveContainer>
             </CardContent>
           </Card>
+
+      
+
         </div>
       </main>
     </div>
