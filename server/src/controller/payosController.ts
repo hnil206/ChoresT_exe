@@ -19,8 +19,8 @@ export const createPaymentLink = async (req: Request, res: Response) => {
 
     const paymentLinkData = {
       orderCode: Date.now(), // Changed to number
-    //   amount: Number(amount), // Ensure this is a number
-      amount: 5000, // Ensure this is a number
+      amount: Number(amount), // Ensure this is a number
+      // amount: 5000, // Ensure this is a number
       description: "Payment for the book",
       cancelUrl: `${process.env.CLIENT_URL}/payment/cancel`,
       returnUrl: `${process.env.CLIENT_URL}/payment/success`,
