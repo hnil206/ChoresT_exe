@@ -29,6 +29,10 @@ type User = {
   createdAt: string;
 }
 
+interface TotalPriceResponse {
+  totalPrice: number;
+}
+
 const AdminHome: React.FC = () => {
   const [activePage, setActivePage] = useState<string>('Dashboard')
   const [users, setUsers] = useState<User[]>([])
@@ -37,6 +41,7 @@ const AdminHome: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [bookingCount, setBookingCount] = useState<number>(0)
+  const [totalPrice, setTotalPrice] = useState<number>(0);
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -66,9 +71,19 @@ const AdminHome: React.FC = () => {
         setLoading(false);
       }
     };
+    const fetchTotalPrice = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get<TotalPriceResponse>(`${process.env.NEXT_PUBLIC_API_URL}/books/total-price`, { headers: { Authorization: `Bearer ${token}` } });
+        setTotalPrice(response.data.totalPrice);
+      } catch (error) {
+        console.error('Error fetching total price:', error);
+      }
+    };
 
     fetchUsers();
     fetchBookings();
+    fetchTotalPrice();
   }, []);
 
   
@@ -145,6 +160,7 @@ const AdminHome: React.FC = () => {
           <Link href="/admin/listbookings">
           <h2 className="text-lg font-semibold text-gray-900 mt-8 mb-4">Total Bookings: {bookingCount}</h2>
           </Link>
+          <h2 className="text-lg font-semibold text-gray-900 mt-8 mb-4">Total Revenue: {totalPrice} VND</h2>
         </div>
       </main>
     </div>
