@@ -14,6 +14,6 @@ router.get('/users', getAllUsers);
 router.get('/housemaid', getAllHousemaids);
 router.put('/user/update', verifyToken,updateProfile);
 router.get('/user/profile', verifyToken, getProfile);
-// router.get('/check-admin', verifyToken, checkAdminRole);
+
 
 export default router;

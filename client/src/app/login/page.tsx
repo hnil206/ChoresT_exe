@@ -33,7 +33,6 @@ const Login = () => {
         localStorage.setItem('token', response.data.accessToken);
         const admin = response.data.roles && response.data.roles.includes('admin');
         alert('Login successful');
-
         if (admin) {
           window.location.href = '/admin'; // Redirect to /admin for admin users
         } else {
