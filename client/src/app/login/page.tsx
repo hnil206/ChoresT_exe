@@ -32,7 +32,7 @@ const Login = () => {
       if (response.data && response.data.accessToken) {
         localStorage.setItem('token', response.data.accessToken);
         alert('Login successful');
-        router.push('/'); // Use Next.js router instead of window.location
+        window.location.href = '/'; // Use Next.js router instead of window.location
       } else {
         console.error('No token received:', response.data);
         alert('Login failed: No token received from server');

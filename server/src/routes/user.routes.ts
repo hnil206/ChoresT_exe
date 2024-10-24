@@ -1,5 +1,5 @@
 import express from 'express';
-import { signup, login, logout, updateProfile, getProfile, getAllHousemaids, getAllUsers, checkAdminRole} from '../controller/user.controller';
+import { signup, login, logout, updateProfile, getProfile, getAllHousemaids, getAllUsers,} from '../controller/user.controller';
 import { verifyToken } from '../middlewares';
 
 const router = express.Router();
@@ -14,6 +14,6 @@ router.get('/users', getAllUsers);
 router.get('/housemaid', getAllHousemaids);
 router.put('/user/update', verifyToken,updateProfile);
 router.get('/user/profile', verifyToken, getProfile);
-router.get('/check-admin', verifyToken, checkAdminRole);
+// router.get('/check-admin', verifyToken, checkAdminRole);
 
 export default router;

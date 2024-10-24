@@ -148,15 +148,15 @@ export const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
-export const checkAdminRole = async (req: Request, res: Response) => {
-  try {
-    const user = await User.findById(req.user!.id).select('roles');
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    const isAdmin = user.roles.includes('admin');
-    res.json({ isAdmin });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
-};
+// export const checkAdminRole = async (req: Request, res: Response) => {
+//   try {
+//     const user = await User.findById(req.user!.id).select('roles');
+//     if (!user) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
+//     const isAdmin = user.roles.includes('admin');
+//     res.json({ isAdmin });
+//   } catch (error) {
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// };
