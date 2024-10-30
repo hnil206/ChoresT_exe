@@ -11,7 +11,6 @@ interface Housemaid {
   _id: string;
   username: string;
   email: string;
-  phone: string;
   avatar: string;
   address: string;  // Thêm địa chỉ
   service: string;  // Thêm dịch vụ
@@ -45,9 +44,8 @@ const HousemaidList: React.FC = () => {
   const additionalHousemaids: Housemaid[] = [
     {
       _id: 'new1',
-      username: 'Anna',
-      email: 'anna@example.com',
-      phone: '123-456-7890',
+      username: 'Nguyễn Thị Hạnh',
+      email: 'HanhNT@gmail.com',
       avatar: '/images/avatar1.jpg',
       address: '123 Main St, Cityville',
       service: 'Cleaning',
@@ -57,7 +55,7 @@ const HousemaidList: React.FC = () => {
       _id: 'new2',
       username: 'John',
       email: 'john@example.com',
-      phone: '098-765-4321',
+      
       avatar: '/images/avatar2.jpg',
       address: '456 Elm St, Townsville',
       service: 'Cooking',
@@ -67,7 +65,7 @@ const HousemaidList: React.FC = () => {
       _id: 'new3',
       username: 'Maria',
       email: 'maria@example.com',
-      phone: '555-123-4567',
+      
       avatar: '/images/avatar3.jpg',
       address: '789 Maple Ave, Villagetown',
       service: 'Babysitting',
@@ -77,7 +75,7 @@ const HousemaidList: React.FC = () => {
       _id: 'new4',
       username: 'lisa',
       email: 'lisa@example.com',
-      phone: '321-654-0987',
+     
       avatar: '/images/avatar4.jpg',
       address: '101 Oak St, Cityland',
       service: 'Laundry',
@@ -87,7 +85,7 @@ const HousemaidList: React.FC = () => {
       _id: 'new5',
       username: 'Sophia',
       email: 'sophia@example.com',
-      phone: '654-321-9870',
+      
       avatar: '/images/avatar5.jpg',
       address: '202 Pine St, Townland',
       service: 'Grocery Shopping',
@@ -112,7 +110,7 @@ const HousemaidList: React.FC = () => {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-gray-600 mb-1">Email: {housemaid.email}</p>
-              <p className="text-sm text-gray-600 mb-1">Phone: {housemaid.phone}</p>
+             
               <p className="text-sm text-gray-600 mb-1">Address: {housemaid.address}</p>
               <p className="text-sm text-gray-600 mb-4">Service: {housemaid.service}</p>
               <Link href={`/housemaid/${housemaid._id}`}>
