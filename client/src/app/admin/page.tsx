@@ -2,12 +2,12 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Bell, ChevronDown, Home, Users, Calendar, Settings, LogOut, DollarSign } from 'lucide-react'
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import Link from 'next/link';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
 
 type Stat = {
   title: string;
@@ -89,6 +89,12 @@ const AdminHome: React.FC = () => {
 
   
 
+  const chartData = [
+    { name: 'Users', value: userCount },
+    { name: 'Bookings', value: bookingCount },
+    { name: 'Revenue (VND)', value: totalPrice },
+  ];
+
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
@@ -155,14 +161,79 @@ const AdminHome: React.FC = () => {
         {/* Dashboard content */}
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           {/* Stats overview */}
-          <Link href="/admin/listusers">
-          <h2 className="text-lg font-semibold text-gray-900 mt-8 mb-4">Total Registered Users: {userCount}</h2>
-          </Link>
-          
-          <Link href="/admin/listbookings">
-          <h2 className="text-lg font-semibold text-gray-900 mt-8 mb-4">Total Bookings: {bookingCount}</h2>
-          </Link>
-          <h2 className="text-lg font-semibold text-gray-900 mt-8 mb-4">Total Revenue: {totalPrice} VND</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Registered Users</CardTitle>
+                <Users className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{userCount}</div>
+                <p className="text-xs text-muted-foreground">
+                  <Link href="/admin/listusers">View all users</Link>
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Bookings</CardTitle>
+                <Calendar className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{bookingCount}</div>
+                <p className="text-xs text-muted-foreground">
+                  <Link href="/admin/listbookings">View all bookings</Link>
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+                <Settings className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{totalPrice.toLocaleString()} VND</div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Charts */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Overview</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="value" fill="#8884d8" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Trend</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line type="monotone" dataKey="value" stroke="#8884d8" />
+                  </LineChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </main>
     </div>
