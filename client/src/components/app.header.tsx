@@ -33,11 +33,11 @@ import { any } from 'zod';
 export default function Header({ isAuthenticated, isAdmin }: { isAuthenticated: boolean, isAdmin: boolean }) {
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (isAuthenticated && isAdmin) {
-  //     router.push("/admin");
-  //   }
-  // }, [isAuthenticated, isAdmin, router]);
+  useEffect(() => {
+    if (isAuthenticated && isAdmin) {
+      router.push("/admin");
+    }
+  }, [isAuthenticated, isAdmin, router]);
 
   const handleLogout = async () => {
     await logout();
