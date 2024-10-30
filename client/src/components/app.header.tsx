@@ -56,9 +56,9 @@ export default function Header({ isAuthenticated, isAdmin }: { isAuthenticated: 
       router.push("/login");
     }
   };
-const handlebookingrequested = () => {
-  router.push("/bookings");
-}
+  const handlebookingrequested = () => {
+    router.push("/bookings");
+  }
   const isHousemaid = true;
   return (
     <header className="bg-blue-500 shadow-md">
@@ -110,8 +110,8 @@ const handlebookingrequested = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   {isAdmin ? (
-                    
-                    <DropdownMenuItem onClick={() => {}}>
+
+                    <DropdownMenuItem onClick={() => { }}>
                       <a href="/admin">Admin Dashboard</a>
                     </DropdownMenuItem>
                   ) : (

@@ -99,23 +99,23 @@ const AdminHome: React.FC = () => {
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
       <aside className="w-64 bg-white shadow-md">
-        <div className="p-4">
+        <div className="p-6">
           <h1 className="text-2xl font-bold text-primary">MaidRental</h1>
         </div>
-        <nav className="mt-8">
+        <nav className="mt-6">
           {['Dashboard', 'Bookings', 'Maids', 'Customers', 'Settings'].map((item) => (
             <button
               key={item}
-              className={`flex items-center w-full px-4 py-2 text-left ${
+              className={`flex items-center w-full px-6 py-3 text-left ${
                 activePage === item ? 'bg-primary text-primary-foreground' : 'text-gray-600 hover:bg-gray-100'
               }`}
               onClick={() => setActivePage(item)}
             >
-              {item === 'Dashboard' && <Home className="mr-2 h-4 w-4" />}
-              {item === 'Bookings' && <Calendar className="mr-2 h-4 w-4" />}
-              {item === 'Maids' && <Users className="mr-2 h-4 w-4" />}
-              {item === 'Customers' && <Users className="mr-2 h-4 w-4" />}
-              {item === 'Settings' && <Settings className="mr-2 h-4 w-4" />}
+              {item === 'Dashboard' && <Home className="mr-3 h-5 w-5" />}
+              {item === 'Bookings' && <Calendar className="mr-3 h-5 w-5" />}
+              {item === 'Maids' && <Users className="mr-3 h-5 w-5" />}
+              {item === 'Customers' && <Users className="mr-3 h-5 w-5" />}
+              {item === 'Settings' && <Settings className="mr-3 h-5 w-5" />}
               {item}
             </button>
           ))}
@@ -125,16 +125,16 @@ const AdminHome: React.FC = () => {
       {/* Main content */}
       <main className="flex-1 overflow-y-auto">
         {/* Admin Header */}
-        <header className="bg-white shadow-sm"></header>
+        <header className="bg-white shadow-sm">
           <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
             <h1 className="text-2xl font-semibold text-gray-900">{activePage}</h1>
             <div className="flex items-center">
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="mr-4">
                 <Bell className="h-5 w-5" />
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="ml-4 flex items-center">
+                  <Button variant="ghost" className="flex items-center">
                     <Avatar className="h-8 w-8 mr-2">
                       <AvatarImage src="/placeholder-admin.jpg" alt="Admin" />
                       <AvatarFallback>AD</AvatarFallback>
@@ -156,6 +156,7 @@ const AdminHome: React.FC = () => {
               </DropdownMenu>
             </div>
           </div>
+        </header>
         
         {/* Dashboard content */}
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
