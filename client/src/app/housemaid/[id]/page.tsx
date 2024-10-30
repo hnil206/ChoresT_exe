@@ -10,8 +10,8 @@ export default function HousemaidPage({ params }: { params: { id: string } }) {
         // Fetch housemaid details here
         // For now, we'll use placeholder data
         setHousemaid({
-            name: 'Jane Doe',
-            age: 28,
+            name: 'Nguyễn Thị Lục',
+            age: 48,
             experience: '5 years',
             specialties: ['Cleaning', 'Cooking', 'Childcare']
         });
@@ -22,7 +22,7 @@ export default function HousemaidPage({ params }: { params: { id: string } }) {
             <h1 className={styles.title}>Housemaid Details</h1>
             {housemaid ? (
                 <div className={styles.detailsCard}>
-                    <p className={styles.id}>ID: {params.id}</p>
+                    
                     <h2 className={styles.name}>{housemaid.name}</h2>
                     <p>Age: {housemaid.age}</p>
                     <p>Experience: {housemaid.experience}</p>

@@ -5,8 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { toast } from 'react-toastify';
-import axios from 'axios';
+import emailjs from 'emailjs-com';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -15,7 +14,7 @@ const Contact = () => {
     phone: '',
     message: '',
   });
-
+  console.log(formData)
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,20 +39,25 @@ const Contact = () => {
     }
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/contact`, formData);
-      if (response.status === 200) {
-        setSuccess('Your message has been sent successfully!');
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          message: '',
-        });
-        setIsSubmitting(false);
-      }
+      await emailjs.send('service_b91nzpg', 'template_gqwenhe', {
+        from_name: formData.name,
+        from_email: formData.email,
+        message: formData.message,
+        phone: formData.phone,
+      }, '57dJY8MEG2fhQBD4f');
+   
+
+      setSuccess('Your message has been sent successfully!');
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        message: '',
+      });
     } catch (error) {
       setError('An error occurred while sending your message. Please try again.');
       console.error('Error sending message:', error);
+    } finally {
       setIsSubmitting(false);
     }
   };

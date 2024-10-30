@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import Link from 'next/link';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 type Stat = {
   title: string;
@@ -92,7 +92,7 @@ const AdminHome: React.FC = () => {
   const chartData = [
     { name: 'Users', value: userCount },
     { name: 'Bookings', value: bookingCount },
-    { name: 'Revenue (VND)', value: totalPrice },
+    { name: 'Revenue', value: totalPrice / 1000000 },
   ];
 
   return (
@@ -106,8 +106,8 @@ const AdminHome: React.FC = () => {
           {['Dashboard', 'Bookings', 'Maids', 'Customers', 'Settings'].map((item) => (
             <button
               key={item}
-              className={`flex items-center w-full px-6 py-3 text-left ${
-                activePage === item ? 'bg-primary text-primary-foreground' : 'text-gray-600 hover:bg-gray-100'
+              className={`flex items-center w-full px-6 py-3 text-left rounded-lg transition-colors duration-200 ${
+                activePage === item ? 'bg-primary text-primary-foreground' : 'text-gray-600 hover:bg-gray-200'
               }`}
               onClick={() => setActivePage(item)}
             >
@@ -129,12 +129,12 @@ const AdminHome: React.FC = () => {
           <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
             <h1 className="text-2xl font-semibold text-gray-900">{activePage}</h1>
             <div className="flex items-center">
-              <Button variant="ghost" size="icon" className="mr-4">
+              <Button variant="ghost" size="icon" className="mr-4 hover:bg-gray-100 transition duration-200">
                 <Bell className="h-5 w-5" />
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="flex items-center">
+                  <Button variant="ghost" className="flex items-center hover:bg-gray-100 transition duration-200">
                     <Avatar className="h-8 w-8 mr-2">
                       <AvatarImage src="/placeholder-admin.jpg" alt="Admin" />
                       <AvatarFallback>AD</AvatarFallback>
@@ -162,78 +162,62 @@ const AdminHome: React.FC = () => {
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           {/* Stats overview */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <Card>
+            <Card className="bg-blue-50 border-blue-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Registered Users</CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium text-blue-600">Total Registered Users</CardTitle>
+                <Users className="h-4 w-4 text-blue-500" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{userCount}</div>
-                <p className="text-xs text-muted-foreground">
-                  <Link href="/admin/listusers">View all users</Link>
+                <div className="text-2xl font-bold text-blue-700">{userCount.toLocaleString()}</div>
+                <p className="text-xs text-blue-600 mt-1">
+                  <Link href="/admin/listusers" className="hover:underline">View all users</Link>
                 </p>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="bg-green-50 border-green-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Bookings</CardTitle>
-                <Calendar className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium text-green-600">Total Bookings</CardTitle>
+                <Calendar className="h-4 w-4 text-green-500" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{bookingCount}</div>
-                <p className="text-xs text-muted-foreground">
-                  <Link href="/admin/listbookings">View all bookings</Link>
+                <div className="text-2xl font-bold text-green-700">{bookingCount.toLocaleString()}</div>
+                <p className="text-xs text-green-600 mt-1">
+                  <Link href="/admin/listbookings" className="hover:underline">View all bookings</Link>
                 </p>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="bg-purple-50 border-purple-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-                <Settings className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium text-purple-600">Total Revenue</CardTitle>
+                <DollarSign className="h-4 w-4 text-purple-500" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{totalPrice.toLocaleString()} VND</div>
+                <div className="text-2xl font-bold text-purple-700">{totalPrice.toLocaleString()} VND</div>
+                <p className="text-xs text-purple-600 mt-1">
+                  Total earnings to date
+                </p>
               </CardContent>
             </Card>
           </div>
 
           {/* Charts */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Overview</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="value" fill="#8884d8" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Trend</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Line type="monotone" dataKey="value" stroke="#8884d8" />
-                  </LineChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-          </div>
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="text-xl font-semibold text-gray-800">Overview</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={400}>
+                <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="value" stroke="#8884d8" activeDot={{ r: 8 }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
         </div>
       </main>
     </div>
