@@ -10,9 +10,9 @@ import { Button } from '@/components/ui/button';
 interface Housemaid {
   _id: string;
   username: string;
-  email: string;
+  
   avatar: string;
-  address: string;  // Thêm địa chỉ
+  age: string;  // Thêm địa chỉ
   service: string;  // Thêm dịch vụ
   additionalImage: string;  // Hình ảnh bổ sung
 }
@@ -44,53 +44,52 @@ const HousemaidList: React.FC = () => {
   const additionalHousemaids: Housemaid[] = [
     {
       _id: 'new1',
-      username: 'Nguyễn Thị Hạnh',
-      email: 'HanhNT@gmail.com',
+      username: 'Đỗ Thị Bé',
+
       avatar: '/images/avatar1.jpg',
-      address: '123 Main St, Cityville',
+      age: '36',
       service: 'Cleaning',
-      additionalImage: '/image/anh1.jpg',
+      additionalImage: '/image/anh9.jpg',
     },
     {
       _id: 'new2',
-      username: 'John',
-      email: 'john@example.com',
-      
+      username: 'Võ Xuân Nam',
+     
       avatar: '/images/avatar2.jpg',
-      address: '456 Elm St, Townsville',
+      age: '21',
       service: 'Cooking',
-      additionalImage: '/image/anh3.webp',
+      additionalImage: '/image/anh10.jpg',
     },
     {
       _id: 'new3',
-      username: 'Maria',
-      email: 'maria@example.com',
+      username: 'Trần Thị Ninh',
+     
       
       avatar: '/images/avatar3.jpg',
-      address: '789 Maple Ave, Villagetown',
-      service: 'Babysitting',
-      additionalImage: '/image/anh4.jpg',
-    },
-    {
-      _id: 'new4',
-      username: 'lisa',
-      email: 'lisa@example.com',
+      age: '45',
+      service: 'Babysitting, cleaning',
+      additionalImage: '/image/anh12.jpg',
+     }
+    // {
+    //   _id: 'new4',
+    //   username: 'lisa',
+    //   email: 'lisa@example.com',
      
-      avatar: '/images/avatar4.jpg',
-      address: '101 Oak St, Cityland',
-      service: 'Laundry',
-      additionalImage: '/image/anh7.jpg',
-    },
-    {
-      _id: 'new5',
-      username: 'Sophia',
-      email: 'sophia@example.com',
+    //   avatar: '/images/avatar4.jpg',
+    //   address: '101 Oak St, Cityland',
+    //   service: 'Laundry',
+    //   additionalImage: '/image/anh7.jpg',
+    // },
+    // {
+    //   _id: 'new5',
+    //   username: 'Sophia',
+    //   email: 'sophia@example.com',
       
-      avatar: '/images/avatar5.jpg',
-      address: '202 Pine St, Townland',
-      service: 'Grocery Shopping',
-      additionalImage: '/image/anh8.jpg',
-    }
+    //   avatar: '/images/avatar5.jpg',
+    //   address: '202 Pine St, Townland',
+    //   service: 'Grocery Shopping',
+    //   additionalImage: '/image/anh8.jpg',
+    // }
   ];
 
   const allHousemaids = [...housemaids, ...additionalHousemaids];
@@ -109,9 +108,9 @@ const HousemaidList: React.FC = () => {
               <CardTitle>{housemaid.username}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-600 mb-1">Email: {housemaid.email}</p>
+              
              
-              <p className="text-sm text-gray-600 mb-1">Address: {housemaid.address}</p>
+              <p className="text-sm text-gray-600 mb-1">Age: {housemaid.age}</p>
               <p className="text-sm text-gray-600 mb-4">Service: {housemaid.service}</p>
               <Link href={`/housemaid/${housemaid._id}`}>
                 <Button variant="outline">View Details</Button>

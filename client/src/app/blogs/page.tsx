@@ -15,7 +15,7 @@ export default function Blogs() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6 text-center">My Blog App</h1>
+      
       <div className="mb-6 text-right">
         <Link href="/blogs/create">
           {token && (
