@@ -11,11 +11,19 @@ const blogSchema = new mongoose.Schema({
     },
     image: {
         type: String,
-        default: null, // Đường dẫn tới hình ảnh
+        default: null,
     },
     date: {
         type: Date,
-        required: true, // Thêm trường ngày
+        required: true,
+    },
+    views: {
+        type: Number,
+        default: 12,
+    },
+    likes: {
+        type: Number,
+        default: 0,
     },
 }, { timestamps: true });
 
